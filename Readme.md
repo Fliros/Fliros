@@ -1,14 +1,52 @@
 
+- [Core Functionality Implementation Plan](#core-functionality-implementation-plan)
 - [Database Schema Design](#database-schema-design)
 - [GPX Processing and Area Calculation Algorithm](#gpx-processing-and-area-calculation-algorithm)
 - [Web Application Architecture](#web-application-architecture)
-- [Core Functionality Implementation Plan](#core-functionality-implementation-plan)
 - [Map Visualization Design](#map-visualization-design) 
 - [Dashboard and Key Indicators Design](#dashboard-and-key-indicators-design)
 - [Implementation Roadmap](#implementation-roadmap)
 - [Potential Challenges and Solutions](#potential-challenges-and-solutions)
 - [Testing and Deployment Strategy](#testing-and-deployment-strategy)
 - [Final Comprehensive Solution](#final-comprehensive-solution)
+
+## Core Functionality Implementation Plan
+1. Set up the development environment:
+   - Initialize a Git repository
+   - Set up Docker containers for PostgreSQL, Python backend, and React frontend
+
+2. Implement basic backend functionality:
+   - User authentication (registration, login, logout)
+   - GPX file upload endpoint
+   - Simple GPX processing (extract coordinates, store in database)
+
+3. Create frontend components:
+   - User authentication forms
+   - File upload interface
+   - Basic map view using Leaflet.js and OpenStreetMap
+
+4. Implement area calculation:
+   - Use PostGIS for buffering and union operations
+   - Calculate total uncovered area and percentage of Earth's surface
+
+5. Develop map visualization:
+   - Create an API endpoint to retrieve uncovered areas as GeoJSON
+   - Implement client-side rendering of uncovered areas on the map
+
+6. Add user dashboard:
+   - Display total uncovered area and percentage
+   - Show recent tracks and statistics
+
+7. Implement asynchronous processing:
+   - Set up Celery for background tasks
+   - Move GPX processing and area calculation to background jobs
+
+8. Optimize and refine:
+   - Implement caching for frequently accessed data
+   - Optimize database queries and indexing
+   - Add error handling and logging
+
+This plan focuses on getting a minimum viable product (MVP) up and running, which we can then iterate upon and improve.
 
 ## Database Schema Design
 Let's design the PostgreSQL schema for our application:
@@ -95,44 +133,6 @@ Deployment:
 1. Docker for containerization
 2. Nginx as a reverse proxy
 3. Gunicorn as an application server for FastAPI
-
-## Core Functionality Implementation Plan
-1. Set up the development environment:
-   - Initialize a Git repository
-   - Set up Docker containers for PostgreSQL, Python backend, and React frontend
-
-2. Implement basic backend functionality:
-   - User authentication (registration, login, logout)
-   - GPX file upload endpoint
-   - Simple GPX processing (extract coordinates, store in database)
-
-3. Create frontend components:
-   - User authentication forms
-   - File upload interface
-   - Basic map view using Leaflet.js and OpenStreetMap
-
-4. Implement area calculation:
-   - Use PostGIS for buffering and union operations
-   - Calculate total uncovered area and percentage of Earth's surface
-
-5. Develop map visualization:
-   - Create an API endpoint to retrieve uncovered areas as GeoJSON
-   - Implement client-side rendering of uncovered areas on the map
-
-6. Add user dashboard:
-   - Display total uncovered area and percentage
-   - Show recent tracks and statistics
-
-7. Implement asynchronous processing:
-   - Set up Celery for background tasks
-   - Move GPX processing and area calculation to background jobs
-
-8. Optimize and refine:
-   - Implement caching for frequently accessed data
-   - Optimize database queries and indexing
-   - Add error handling and logging
-
-This plan focuses on getting a minimum viable product (MVP) up and running, which we can then iterate upon and improve.
 
 ## Map Visualization Design
 1. Data Preparation:
