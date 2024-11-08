@@ -18,11 +18,11 @@
 
    ```json
    {
-     \"editor.formatOnSave\": true,
-     \"editor.defaultFormatter\": \"esbenp.prettier-vscode\",
-     \"python.formatting.provider\": \"black\",
-     \"python.linting.enabled\": true,
-     \"python.linting.flake8Enabled\": true
+     "editor.formatOnSave": true,
+     "editor.defaultFormatter": "esbenp.prettier-vscode",
+     "python.formatting.provider": "black",
+     "python.linting.enabled": true,
+     "python.linting.flake8Enabled": true
    }
    ```
 
@@ -37,8 +37,8 @@
    - Configure Git:
 
    ```bash
-   git config --global user.name \"Your Name\"
-   git config --global user.email \"your.email@example.com\"
+   git config --global user.name "Your Name"
+   git config --global user.email "your.email@example.com"
    ```
 
    - Install GitHub Desktop from: https://desktop.github.com/
@@ -116,7 +116,7 @@
    cd gpx-tracker
 
    # Initialize Poetry project
-   poetry init --name gpx-tracker --description \"GPX Track Analysis Application\" --author \"Your Name <your.email@example.com>\" --python \"^3.9\"
+   poetry init --name gpx-tracker --description "GPX Track Analysis Application" --author "Your Name <your.email@example.com>" --python "^3.9"
 
    # Add essential dependencies
    poetry add fastapi uvicorn sqlalchemy psycopg2-binary geoalchemy2 gpxpy celery redis
@@ -198,14 +198,14 @@
          POSTGRES_PASSWORD: yourpassword
          POSTGRES_DB: gpx_tracker
        ports:
-         - \"5432:5432\"
+         - "5432:5432"
        volumes:
          - pgdata:/var/lib/postgresql/data
 
      redis:
        image: redis:alpine
        ports:
-         - \"6379:6379\"
+         - "6379:6379"
 
      backend:
        build:
@@ -214,7 +214,7 @@
        volumes:
          - ./backend:/app
        ports:
-         - \"8000:8000\"
+         - "8000:8000"
        depends_on:
          - postgres
          - redis
@@ -229,7 +229,7 @@
        volumes:
          - ./frontend:/app
        ports:
-         - \"3000:3000\"
+         - "3000:3000"
        depends_on:
          - backend
 
@@ -251,7 +251,7 @@
    psql --version
 
    # Test PostgreSQL connection
-   docker exec -it gpx-postgres psql -U postgres -d gpx_tracker -c \"\\dt\"
+   docker exec -it gpx-postgres psql -U postgres -d gpx_tracker -c "\\dt"
 
    # Start the development environment
    docker-compose up -d
@@ -282,25 +282,25 @@
 
     ```json
     {
-      \"editor.formatOnSave\": true,
-      \"editor.codeActionsOnSave\": {
-        \"source.fixAll.eslint\": true
+      "editor.formatOnSave": true,
+      "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
       },
-      \"python.analysis.typeCheckingMode\": \"basic\",
-      \"python.formatting.provider\": \"black\",
-      \"python.linting.enabled\": true,
-      \"python.linting.flake8Enabled\": true,
-      \"[python]\": {
-        \"editor.formatOnSave\": true,
-        \"editor.defaultFormatter\": \"ms-python.python\"
+      "python.analysis.typeCheckingMode": "basic",
+      "python.formatting.provider": "black",
+      "python.linting.enabled": true,
+      "python.linting.flake8Enabled": true,
+      "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-python.python"
       },
-      \"[javascript][typescript][javascriptreact][typescriptreact]\": {
-        \"editor.defaultFormatter\": \"esbenp.prettier-vscode\"
+      "[javascript][typescript][javascriptreact][typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
       },
-      \"files.exclude\": {
-        \"**/__pycache__\": true,
-        \"**/.pytest_cache\": true,
-        \"**/*.pyc\": true
+      "files.exclude": {
+        "**/__pycache__": true,
+        "**/.pytest_cache": true,
+        "**/*.pyc": true
       }
     }
     ```
