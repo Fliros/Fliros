@@ -29,7 +29,7 @@
    # Create repository
    gh repo create gpx-tracker \
      --public \
-     --description \"A web application for tracking and visualizing GPX routes\" \
+     --description "A web application for tracking and visualizing GPX routes" \
      --license mit \
      --gitignore Python \
      --clone
@@ -108,9 +108,9 @@
    # Initialize Poetry project
    poetry init \\
      --name gpx-tracker-backend \\
-     --description \"Backend for GPX tracking application\" \\
-     --author \"Your Name <your.email@example.com>\" \\
-     --python \"^3.9\" \\
+     --description "Backend for GPX tracking application" \\
+     --author "Your Name <your.email@example.com>" \\
+     --python "^3.9" \\
      --dependency fastapi \\
      --dependency uvicorn \\
      --dependency sqlalchemy \\\
@@ -143,15 +143,15 @@
    from typing import List, Optional
 
    class Settings(BaseSettings):
-       PROJECT_NAME: str = \"GPX Tracker\"
-       VERSION: str = \"1.0.0\"
-       API_V1_STR: str = \"/api/v1\"
+       PROJECT_NAME: str = "GPX Tracker"
+       VERSION: str = "1.0.0"
+       API_V1_STR: str = "/api/v1"
 
-       POSTGRES_SERVER: str = \"localhost\"
-       POSTGRES_USER: str = \"postgres\"
-       POSTGRES_PASSWORD: str = \"password\"
-       POSTGRES_DB: str = \"gpx_tracker\"
-       POSTGRES_PORT: str = \"5432\"
+       POSTGRES_SERVER: str = "localhost"
+       POSTGRES_USER: str = "postgres"
+       POSTGRES_PASSWORD: str = "password"
+       POSTGRES_DB: str = "gpx_tracker"
+       POSTGRES_PORT: str = "5432"
 
        DATABASE_URL: Optional[str] = None
 
@@ -159,20 +159,20 @@
        def SQLALCHEMY_DATABASE_URI(self) -> str:
            if self.DATABASE_URL:
                return self.DATABASE_URL
-           return f\"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}\"
+           return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
-       REDIS_URL: str = \"redis://localhost:6379/0\"
+       REDIS_URL: str = "redis://localhost:6379/0"
 
        # Security
-       SECRET_KEY: str = \"your-secret-key-here\"
+       SECRET_KEY: str = "your-secret-key-here"
        ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
 
        # CORS
-       BACKEND_CORS_ORIGINS: List[str] = [\"http://localhost:3000\"]
+       BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000"]
 
        class Config:
            case_sensitive = True
-           env_file = \".env\"
+           env_file = ".env"
 
    settings = Settings()
    ```
@@ -187,7 +187,7 @@
    app = FastAPI(
        title=settings.PROJECT_NAME,
        version=settings.VERSION,
-       openapi_url=f\"{settings.API_V1_STR}/openapi.json\"
+       openapi_url=f"{settings.API_V1_STR}/openapi.json"
    )
 
    # Set up CORS
@@ -195,13 +195,13 @@
        CORSMiddleware,
        allow_origins=settings.BACKEND_CORS_ORIGINS,
        allow_credentials=True,
-       allow_methods=[\"*\"],
-       allow_headers=[\"*\"],
+       allow_methods=["*"],
+       allow_headers=["*"],
    )
 
-   @app.get(\"/\")
+   @app.get("/")
    def read_root():
-       return {\"message\": \"Welcome to GPX Tracker API\"}
+       return {"message": "Welcome to GPX Tracker API"}
    ```
 
 # Part 3: Frontend Setup
@@ -294,17 +294,12 @@
    ```javascript
    /** @type {import('tailwindcss').Config} */
    export default {
-     content: [
-       \"./index.html\",
-       \"./src/**/*.{js,ts,jsx,tsx}\",
-     ],
+     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
      theme: {
        extend: {},
      },
-     plugins: [
-       require('@tailwindcss/forms'),
-     ],
-   }
+     plugins: [require("@tailwindcss/forms")],
+   };
    ```
 
    D. Update src/index.css:
@@ -333,7 +328,7 @@ RUN poetry config virtualenvs.create false \\
 
 COPY . .
 
-CMD [\"poetry\", \"run\", \"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\", \"--reload\"]
+CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 ```
 
 B. docker/frontend/Dockerfile:
@@ -348,7 +343,7 @@ RUN npm install
 
 COPY . .
 
-CMD [\"npm\", \"run\", \"dev\", \"--\", \"--host\", \"0.0.0.0\"]
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
 ```
 
 C. Root docker-compose.yml:
@@ -364,14 +359,14 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: gpx_tracker
     ports:
-      - \"5432:5432\"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   redis:
     image: redis:alpine
     ports:
-      - \"6379:6379\"
+      - "6379:6379"
 
   backend:
     build:
@@ -380,7 +375,7 @@ services:
     volumes:
       - ./backend:/app
     ports:
-      - \"8000:8000\"
+      - "8000:8000"
     depends_on:
       - postgres
       - redis
@@ -395,7 +390,7 @@ services:
     volumes:
       - ./frontend:/app
     ports:
-      - \"3000:3000\"
+      - "3000:3000"
     depends_on:
       - backend
 
@@ -507,7 +502,7 @@ volumes:
 
       ```bash
       git add .
-      git commit -m \"Add your feature description\"
+      git commit -m "Add your feature description"
       ```
 
    3. Push to your branch:
@@ -545,7 +540,7 @@ volumes:
    ACCESS_TOKEN_EXPIRE_MINUTES=11520
 
    # CORS
-   BACKEND_CORS_ORIGINS=[\"http://localhost:3000\"]
+   BACKEND_CORS_ORIGINS=["http://localhost:3000"]
 
    # Debug
    DEBUG=True
@@ -565,16 +560,16 @@ volumes:
 
     ```toml
     [tool.poetry.scripts]
-    start = \"uvicorn app.main:app --reload\"
-    test = \"pytest\"
-    lint = \"flake8\"
-    format = \"black .\"
-    typecheck = \"mypy .\"
+    start = "uvicorn app.main:app --reload"
+    test = "pytest"
+    lint = "flake8"
+    format = "black ."
+    typecheck = "mypy ."
 
     [tool.pytest.ini_options]
-    testpaths = [\"tests\"]
-    python_files = \"test_*.py\"
-    addopts = \"--verbosity=2 --cov=app\"
+    testpaths = ["tests"]
+    python_files = "test_*.py"
+    addopts = "--verbosity=2 --cov=app"
 
     [tool.black]
     line-length = 88
@@ -582,7 +577,7 @@ volumes:
     include = '\\.pyi?$'
 
     [tool.mypy]
-    python_version = \"3.9\"
+    python_version = "3.9"
     warn_return_any = true
     warn_unused_configs = true
     disallow_untyped_defs = true
@@ -592,15 +587,15 @@ volumes:
 
     ```json
     {
-      \"scripts\": {
-        \"dev\": \"vite\",
-        \"build\": \"tsc && vite build\",
-        \"lint\": \"eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0\",
-        \"preview\": \"vite preview\",
-        \"test\": \"vitest run\",
-        \"test:watch\": \"vitest\",
-        \"test:coverage\": \"vitest run --coverage\",
-        \"format\": \"prettier --write 'src/**/*.{ts,tsx,css}'\"
+      "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "format": "prettier --write 'src/**/*.{ts,tsx,css}'"
       }
     }
     ```
@@ -617,10 +612,10 @@ volumes:
     from app.core.config import settings
     from app.db.base import Base
 
-    @pytest.fixture(scope=\"session\")
+    @pytest.fixture(scope="session")
     def test_db():
         # Use SQLite for tests
-        SQLALCHEMY_TEST_DATABASE_URL = \"sqlite:///./test.db\"
+        SQLALCHEMY_TEST_DATABASE_URL = "sqlite:///./test.db"
         engine = create_engine(SQLALCHEMY_TEST_DATABASE_URL)
         TestingSessionLocal = sessionmaker(bind=engine)
 
@@ -658,19 +653,19 @@ volumes:
     cd frontend
     npm install -D husky lint-staged
     npx husky install
-    npm pkg set scripts.prepare=\"husky install\"
+    npm pkg set scripts.prepare="husky install"
 
     # Add pre-commit hook
-    npx husky add .husky/pre-commit \"npm run lint-staged\"
+    npx husky add .husky/pre-commit "npm run lint-staged"
     ```
 
     Add to frontend/package.json:
 
     ```json
     {
-      \"lint-staged\": {
-        \"*.{ts,tsx}\": [\"eslint --fix\"],
-        \"*.{ts,tsx,css,md}\": [\"prettier --write\"]
+      "lint-staged": {
+        "*.{ts,tsx}": ["eslint --fix"],
+        "*.{ts,tsx,css,md}": ["prettier --write"]
       }
     }
     ```
