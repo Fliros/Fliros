@@ -1,4 +1,6 @@
-# Project Initialization - Part 1: GitHub Repository Setup
+# Project Initialization
+
+# Part 1: GitHub Repository Setup
 
 1. Create GitHub Repository:
    A. Using GitHub Desktop:
@@ -96,7 +98,7 @@
    .pytest_cache/
    ```
 
-# Project Initialization - Part 2: Backend Setup
+# Part 2: Backend Setup
 
 4. Initialize Backend Project:
 
@@ -202,7 +204,7 @@
        return {\"message\": \"Welcome to GPX Tracker API\"}
    ```
 
-# Project Initialization - Part 3: Frontend Setup
+# Part 3: Frontend Setup
 
 6. Initialize Frontend Project:
 
@@ -313,7 +315,7 @@
    @tailwind utilities;
    ```
 
-# Project Initialization - Part 4: Docker and Documentation Setup
+# Part 4: Docker and Documentation Setup
 
 8.  Create Docker Configuration:
     A. docker/backend/Dockerfile:
@@ -556,7 +558,7 @@ volumes:
    VITE_MAPBOX_TOKEN=your-mapbox-token-here
    ```
 
-# Project Initialization - Part 5: Development Scripts and Testing Setup
+# Part 5: Development Scripts and Testing Setup
 
 10. Set up Development Scripts:
     A. Add scripts to backend/pyproject.toml:
