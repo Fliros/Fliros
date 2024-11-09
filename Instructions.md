@@ -66,91 +66,102 @@
 # Development Environment Setup - Part 2: Database and Python
 
 4. PostgreSQL Setup:
-   A. Local Installation:
 
-   - Windows: Download from https://www.postgresql.org/download/windows/
-   - macOS: `brew install postgresql postgis`
-   - Linux:
+A. Local Installation:
 
-   ```bash
-   sudo apt-get update
-   sudo apt-get install postgresql postgresql-contrib postgis
-   ```
+- Windows: Download from https://www.postgresql.org/download/windows/
+- macOS: `brew install postgresql postgis`
+- Linux:
 
-   B. Create PostgreSQL Docker Container:
+```bash
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib postgis
+```
 
-   ```bash
-   # Pull PostgreSQL with PostGIS image
-   docker pull postgis/postgis
+B. Create PostgreSQL Docker Container:
 
-   # Create a Docker volume for persistent data
-   docker volume create pgdata
+```bash
+# Pull PostgreSQL with PostGIS image
+docker pull postgis/postgis
 
-   # Run PostgreSQL container
-   docker run --name gpx-postgres \\
-     -e POSTGRES_PASSWORD=yourpassword \\
-     -e POSTGRES_DB=gpx_tracker \\
-     -p 5432:5432 \\
-     -v pgdata:/var/lib/postgresql/data \\
-     -d postgis/postgis
-   ```
+# Create a Docker volume for persistent data
+docker volume create pgdata
+
+# Run PostgreSQL container
+docker run --name gpx-postgres \\
+  -e POSTGRES_PASSWORD=yourpassword \\
+  -e POSTGRES_DB=gpx_tracker \\
+  -p 5432:5432 \\
+  -v pgdata:/var/lib/postgresql/data \\
+  -d postgis/postgis
+```
 
 5. Python Environment Setup:
-   A. Install Python 3.9 or later:
 
-   - Windows: Download from https://www.python.org/downloads/
-   - macOS: `brew install python@3.9`
-   - Linux: `sudo apt-get install python3.9`
+A. Install Python 3.9 or later:
 
-   B. Install Poetry (Python dependency management):
+- Windows: Download from https://www.python.org/downloads/
+- macOS: `brew install python@3.9`
+- Linux: `sudo apt-get install python3.9`
 
-   ```bash
-   curl -sSL https://install.python-poetry.org | python3 -
-   ```
+B. Install Poetry (Python dependency management):
 
-   C. Create Python virtual environment:
+osx / linux / bashonwindows / Windows+MinGW install instructions
 
-   ```bash
-   # Create project directory
-   mkdir gpx-tracker
-   cd gpx-tracker
+```bash
+ curl -sSL https://install.python-poetry.org | python3 -
+```
 
-   # Initialize Poetry project
-   poetry init --name gpx-tracker --description "GPX Track Analysis Application" --author "Your Name <your.email@example.com>" --python "^3.9"
+    windows powershell install instructions
 
-   # Add essential dependencies
-   poetry add fastapi uvicorn sqlalchemy psycopg2-binary geoalchemy2 gpxpy celery redis
+```bash
+ (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+```
 
-   # Add development dependencies
-   poetry add --dev pytest black flake8 mypy pytest-cov
-   ```
+C. Create Python virtual environment:
+
+```bash
+# Create project directory
+mkdir gpx-tracker
+cd gpx-tracker
+
+# Initialize Poetry project
+poetry init --name gpx-tracker --description "GPX Track Analysis Application" --author "Your Name <your.email@example.com>" --python "^3.9"
+
+# Add essential dependencies
+poetry add fastapi uvicorn sqlalchemy psycopg2-binary geoalchemy2 gpxpy celery redis
+
+# Add development dependencies
+poetry add --dev pytest black flake8 mypy pytest-cov
+```
 
 # Development Environment Setup - Part 3: Frontend and Project Structure
 
 6. Node.js and Frontend Setup:
-   A. Install Node.js:
 
-   - Download LTS version from https://nodejs.org/
-   - Or using package manager:
-     - macOS: `brew install node`
-     - Linux:
-     ```bash
-     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-     sudo apt-get install -y nodejs
-     ```
+A. Install Node.js:
 
-   B. Initialize Frontend Project:
+- Download LTS version from https://nodejs.org/
+- Or using package manager:
+  - macOS: `brew install node`
+  - Linux:
+  ```bash
+  curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+  sudo apt-get install -y nodejs
+  ```
 
-   ```bash
-   # Create React project using Vite
-   npm create vite@latest gpx-tracker-frontend -- --template react-ts
-   cd gpx-tracker-frontend
+B. Initialize Frontend Project:
 
-   # Install dependencies
-   npm install
-   npm install leaflet @types/leaflet axios react-query tailwindcss postcss autoprefixer
-   npm install --save-dev jest @testing-library/react @testing-library/jest-dom
-   ```
+```bash
+# Create React project using Vite
+npm create vite@latest gpx-tracker-frontend -- --template react-ts
+cd gpx-tracker-frontend
+
+# Install dependencies
+npm install
+npm install leaflet @types/leaflet axios react-query tailwindcss postcss autoprefixer
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+```
 
 7. Project Structure Setup:
 
@@ -185,57 +196,58 @@
    ```
 
 8. Docker Compose Configuration:
-   Create docker-compose.yml:
 
-   ```yaml
-   version: "3.8"
+Create docker-compose.yml:
 
-   services:
-     postgres:
-       image: postgis/postgis
-       environment:
-         POSTGRES_USER: postgres
-         POSTGRES_PASSWORD: yourpassword
-         POSTGRES_DB: gpx_tracker
-       ports:
-         - "5432:5432"
-       volumes:
-         - pgdata:/var/lib/postgresql/data
+```yaml
+version: "3.8"
 
-     redis:
-       image: redis:alpine
-       ports:
-         - "6379:6379"
+services:
+  postgres:
+    image: postgis/postgis
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: yourpassword
+      POSTGRES_DB: gpx_tracker
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
-     backend:
-       build:
-         context: ./backend
-         dockerfile: ../docker/backend/Dockerfile
-       volumes:
-         - ./backend:/app
-       ports:
-         - "8000:8000"
-       depends_on:
-         - postgres
-         - redis
-       environment:
-         DATABASE_URL: postgresql://postgres:yourpassword@postgres:5432/gpx_tracker
-         REDIS_URL: redis://redis:6379/0
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
 
-     frontend:
-       build:
-         context: ./frontend
-         dockerfile: ../docker/frontend/Dockerfile
-       volumes:
-         - ./frontend:/app
-       ports:
-         - "3000:3000"
-       depends_on:
-         - backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DATABASE_URL: postgresql://postgres:yourpassword@postgres:5432/gpx_tracker
+      REDIS_URL: redis://redis:6379/0
 
-   volumes:
-     pgdata:
-   ```
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+```
 
 # Development Environment Setup - Part 4: Verification and Configuration",
 
@@ -258,6 +270,7 @@
 ```
 
 10. Environment Variables Setup:
+
     Create .env files for both frontend and backend:
 
     backend/.env:
@@ -278,6 +291,7 @@
     ```
 
 11. VS Code Workspace Settings:
+
     Create .vscode/settings.json:
 
     ```json
