@@ -33,8 +33,8 @@ Backend Development
    from pydantic import AnyHttpUrl, validator
 
    class Settings(BaseSettings):
-       PROJECT_NAME: str = \"GPX Tracker\"
-       API_V1_STR: str = \"/api/v1\"
+       PROJECT_NAME: str = "GPX Tracker"
+       API_V1_STR: str = "/api/v1"
        SECRET_KEY: str
        ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
 
@@ -43,19 +43,19 @@ Backend Development
        POSTGRES_USER: str
        POSTGRES_PASSWORD: str
        POSTGRES_DB: str
-       POSTGRES_PORT: str = \"5432\"
+       POSTGRES_PORT: str = "5432"
        DATABASE_URL: Optional[str] = None
 
        # Redis
-       REDIS_URL: str = \"redis://localhost:6379/0\"
+       REDIS_URL: str = "redis://localhost:6379/0"
 
        # CORS
        BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
-       @validator(\"BACKEND_CORS_ORIGINS\", pre=True)
+       @validator("BACKEND_CORS_ORIGINS", pre=True)
        def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
-           if isinstance(v, str) and not v.startswith(\"[\"):
-               return [i.strip() for i in v.split(\",\")]
+           if isinstance(v, str) and not v.startswith("["):
+               return [i.strip() for i in v.split(",")]
            elif isinstance(v, (list, str)):
                return v
            raise ValueError(v)
@@ -64,11 +64,11 @@ Backend Development
        def SQLALCHEMY_DATABASE_URI(self) -> str:
            if self.DATABASE_URL:
                return self.DATABASE_URL
-           return f\"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}\"
+           return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
        class Config:
            case_sensitive = True
-           env_file = \".env\"
+           env_file = ".env"
 
    settings = Settings()
    ```
@@ -108,7 +108,7 @@ Backend Development
 
    app = FastAPI(
        title=settings.PROJECT_NAME,
-       openapi_url=f\"{settings.API_V1_STR}/openapi.json\"
+       openapi_url=f"{settings.API_V1_STR}/openapi.json"
    )
 
    if settings.BACKEND_CORS_ORIGINS:
@@ -116,15 +116,15 @@ Backend Development
            CORSMiddleware,
            allow_origins=[str(origin) for origin in settings.BACKEND_CORS_ORIGINS],
            allow_credentials=True,
-           allow_methods=[\"*\"],
-           allow_headers=[\"*\"],
+           allow_methods=["*"],
+           allow_headers=["*"],
        )
 
    app.include_router(api_router, prefix=settings.API_V1_STR)
 
-   @app.get(\"/\")
+   @app.get("/")
    def root():
-       return {\"message\": \"Welcome to GPX Tracker API\"}
+       return {"message": "Welcome to GPX Tracker API"}
    ```
 
 5. API Router Setup:
@@ -136,9 +136,9 @@ Backend Development
 
    api_router = APIRouter()
 
-   api_router.include_router(users.router, prefix=\"/users\", tags=[\"users\"])
-   api_router.include_router(tracks.router, prefix=\"/tracks\", tags=[\"tracks\"])
-   api_router.include_router(areas.router, prefix=\"/areas\", tags=[\"areas\"])
+   api_router.include_router(users.router, prefix="/users", tags=["users"])
+   api_router.include_router(tracks.router, prefix="/tracks", tags=["tracks"])
+   api_router.include_router(areas.router, prefix="/areas", tags=["areas"])
    ```
 
 ## Part 2: User Authentication
@@ -153,9 +153,9 @@ Backend Development
    from passlib.context import CryptContext
    from app.core.config import settings
 
-   pwd_context = CryptContext(schemes=[\"bcrypt\"], deprecated=\"auto\")
+   pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-   ALGORITHM = \"HS256\"
+   ALGORITHM = "HS256"
 
    def create_access_token(
        subject: Union[str, Any], expires_delta: timedelta = None
@@ -166,7 +166,7 @@ Backend Development
            expire = datetime.utcnow() + timedelta(
                minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
            )
-       to_encode = {\"exp\": expire, \"sub\": str(subject)}
+       to_encode = {"exp": expire, "sub": str(subject)}
        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
        return encoded_jwt
 
@@ -234,7 +234,7 @@ Backend Development
    from app.schemas.user import TokenPayload
 
    oauth2_scheme = OAuth2PasswordBearer(
-       tokenUrl=f\"{settings.API_V1_STR}/auth/login\"
+       tokenUrl=f"{settings.API_V1_STR}/auth/login"
    )
 
    def get_db() -> Generator:
@@ -256,13 +256,13 @@ Backend Development
        except (JWTError, ValidationError):
            raise HTTPException(
                status_code=status.HTTP_403_FORBIDDEN,
-               detail=\"Could not validate credentials\",
+               detail="Could not validate credentials",
            )
        user = db.query(User).get(token_data.sub)
        if not user:
-           raise HTTPException(status_code=404, detail=\"User not found\")
+           raise HTTPException(status_code=404, detail="User not found")
        if not user.is_active:
-           raise HTTPException(status_code=400, detail=\"Inactive user\")
+           raise HTTPException(status_code=400, detail="Inactive user")
        return user
    ```
 
@@ -283,39 +283,39 @@ Backend Development
 
    router = APIRouter()
 
-   @router.post(\"/login\", response_model=Token)
+   @router.post("/login", response_model=Token)
    def login(
        db: Session = Depends(deps.get_db),
        form_data: OAuth2PasswordRequestForm = Depends()
    ) -> Any:
-       \"\"\"OAuth2 compatible token login\"\"\"
+       """OAuth2 compatible token login"""
        user = crud.user.authenticate(
            db, email=form_data.username, password=form_data.password
        )
        if not user:
            raise HTTPException(
-               status_code=400, detail=\"Incorrect email or password\"
+               status_code=400, detail="Incorrect email or password"
            )
        elif not user.is_active:
-           raise HTTPException(status_code=400, detail=\"Inactive user\")
+           raise HTTPException(status_code=400, detail="Inactive user")
        access_token_expires = timedelta(
            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
        )
        return {
-           \"access_token\": security.create_access_token(
+           "access_token": security.create_access_token(
                user.id, expires_delta=access_token_expires
            ),
-           \"token_type\": \"bearer\",
+           "token_type": "bearer",
        }
 
-   @router.post(\"/signup\", response_model=User)
+   @router.post("/signup", response_model=User)
    def create_user(*, db: Session = Depends(deps.get_db), user_in: UserCreate) -> Any:
-       \"\"\"Create new user\"\"\"
+       """Create new user"""
        user = crud.user.get_by_email(db, email=user_in.email)
        if user:
            raise HTTPException(
                status_code=400,
-               detail=\"The user with this email already exists\",
+               detail="The user with this email already exists",
            )
        user = crud.user.create(db, obj_in=user_in)
        return user
@@ -377,7 +377,7 @@ Backend Development
            self.gpx = gpxpy.parse(io.StringIO(gpx_file.decode()))
 
        def get_track_points(self) -> List[Tuple[float, float, float, datetime]]:
-           \"\"\"Extract track points with elevation and time\"\"\"
+           """Extract track points with elevation and time"""
            points = []
            for track in self.gpx.tracks:
                for segment in track.segments:
@@ -391,28 +391,28 @@ Backend Development
            return points
 
        def calculate_statistics(self) -> dict:
-           \"\"\"Calculate track statistics\"\"\"
+           """Calculate track statistics"""
            stats = self.gpx.get_moving_data()
            return {
-               \"moving_time\": stats.moving_time,
-               \"stopped_time\": stats.stopped_time,
-               \"moving_distance\": stats.moving_distance,
-               \"total_distance\": self.gpx.length_3d(),
-               \"max_speed\": stats.max_speed,
-               \"avg_speed\": stats.moving_distance / stats.moving_time if stats.moving_time > 0 else 0,
-               \"total_elevation_gain\": self.gpx.get_elevation_extremes().elevation_gain,
-               \"total_elevation_loss\": self.gpx.get_elevation_extremes().elevation_loss,
-               \"start_time\": self.gpx.get_time_bounds().start_time,
-               \"end_time\": self.gpx.get_time_bounds().end_time,
+               "moving_time": stats.moving_time,
+               "stopped_time": stats.stopped_time,
+               "moving_distance": stats.moving_distance,
+               "total_distance": self.gpx.length_3d(),
+               "max_speed": stats.max_speed,
+               "avg_speed": stats.moving_distance / stats.moving_time if stats.moving_time > 0 else 0,
+               "total_elevation_gain": self.gpx.get_elevation_extremes().elevation_gain,
+               "total_elevation_loss": self.gpx.get_elevation_extremes().elevation_loss,
+               "start_time": self.gpx.get_time_bounds().start_time,
+               "end_time": self.gpx.get_time_bounds().end_time,
            }
 
        def calculate_covered_area(self, buffer_distance: float = 50) -> Tuple[float, dict]:
-           \"\"\"Calculate area covered by track with buffer\"\"\"
+           """Calculate area covered by track with buffer"""
            points = [Point(p.longitude, p.latitude) for track in self.gpx.tracks
                     for segment in track.segments
                     for p in segment.points]
            if not points:
-               return 0, {\"type\": \"MultiPolygon\", \"coordinates\": []}
+               return 0, {"type": "MultiPolygon", "coordinates": []}
 
            # Create buffer around points
            multi_point = MultiPoint(points)
@@ -420,9 +420,9 @@ Backend Development
 
            # Convert to GeoJSON
            geojson = {
-               \"type\": \"MultiPolygon\",
-               \"coordinates\": [[list(coord) for coord in polygon.exterior.coords]]
-                              for polygon in buffered.__geo_interface__[\"coordinates\"]]
+               "type": "MultiPolygon",
+               "coordinates": [[list(coord) for coord in polygon.exterior.coords]]
+                              for polygon in buffered.__geo_interface__["coordinates"]]
            }
 
            return buffered.area * 12365.1, geojson  # Convert to square kilometers
@@ -435,10 +435,10 @@ Backend Development
    from celery import Celery
    from app.core.config import settings
 
-   celery_app = Celery(\"worker\", broker=settings.REDIS_URL)
+   celery_app = Celery("worker", broker=settings.REDIS_URL)
 
    celery_app.conf.task_routes = {
-       \"app.worker.process_gpx_file\": \"main-queue\"
+       "app.worker.process_gpx_file": "main-queue"
    }
    ```
 
@@ -472,7 +472,7 @@ Backend Development
 
    @celery_app.task(base=SQLAlchemyTask)
    def process_gpx_file(track_id: UUID, file_content: bytes) -> Dict[str, Any]:
-       \"\"\"Process uploaded GPX file asynchronously\"\"\"
+       """Process uploaded GPX file asynchronously"""
        try:
            processor = GPXProcessor(file_content)
 
@@ -487,11 +487,11 @@ Backend Development
 
            # Update track record
            track = crud_track.get(process_gpx_file.db, id=track_id)
-           track.status = \"completed\"
-           track.start_time = stats[\"start_time\"]
-           track.end_time = stats[\"end_time\"]
-           track.total_distance = stats[\"total_distance\"]
-           track.total_elevation_gain = stats[\"total_elevation_gain\"]
+           track.status = "completed"
+           track.start_time = stats["start_time"]
+           track.end_time = stats["end_time"]
+           track.total_distance = stats["total_distance"]
+           track.total_elevation_gain = stats["total_elevation_gain"]
 
            # Create track points
            for lat, lon, ele, time in points:
@@ -507,18 +507,18 @@ Backend Development
            process_gpx_file.db.commit()
 
            return {
-               \"status\": \"success\",
-               \"track_id\": str(track_id),
-               \"statistics\": stats,
-               \"area\": {
-                   \"size\": area_size,
-                   \"geojson\": area_geojson
+               "status": "success",
+               "track_id": str(track_id),
+               "statistics": stats,
+               "area": {
+                   "size": area_size,
+                   "geojson": area_geojson
                }
            }
 
        except Exception as e:
            track = crud_track.get(process_gpx_file.db, id=track_id)
-           track.status = \"error\"
+           track.status = "error"
            track.error_message = str(e)
            process_gpx_file.db.commit()
            raise
@@ -539,18 +539,18 @@ Backend Development
 
    router = APIRouter()
 
-   @router.post(\"/upload\", response_model=Track)
+   @router.post("/upload", response_model=Track)
    async def upload_gpx(
        *,
        db: Session = Depends(deps.get_db),
        file: UploadFile = File(...),
        current_user: User = Depends(deps.get_current_user)
    ) -> Any:
-       \"\"\"Upload GPX file for processing\"\"\"
-       if not file.filename.endswith(\".gpx\"):
+       """Upload GPX file for processing"""
+       if not file.filename.endswith(".gpx"):
            raise HTTPException(
                status_code=400,
-               detail=\"File must be a GPX file\"
+               detail="File must be a GPX file"
            )
 
        content = await file.read()
@@ -569,14 +569,14 @@ Backend Development
 
        return track
 
-   @router.get(\"/\", response_model=List[TrackList])
+   @router.get("/", response_model=List[TrackList])
    def list_tracks(
        db: Session = Depends(deps.get_db),
        current_user: User = Depends(deps.get_current_user),
        skip: int = 0,
        limit: int = 100
    ) -> Any:
-       \"\"\"List user's tracks\"\"\"
+       """List user's tracks"""
        tracks = crud_track.get_multi_by_user(
            db, user_id=current_user.id, skip=skip, limit=limit
        )
@@ -602,7 +602,7 @@ Backend Development
            self.db = db
 
        def calculate_user_coverage(self, user_id: str, buffer_meters: float = 50) -> Dict[str, Any]:
-           \"\"\"Calculate total area covered by user's tracks\"\"\"
+           """Calculate total area covered by user's tracks"""
            # Get all track points for user
            points = self.db.query(TrackPoint).join(
                TrackPoint.track
@@ -612,9 +612,9 @@ Backend Development
 
            if not points:
                return {
-                   \"area_km2\": 0,
-                   \"percentage\": 0,
-                   \"geojson\": {\"type\": \"MultiPolygon\", \"coordinates\": []}
+                   "area_km2": 0,
+                   "percentage": 0,
+                   "geojson": {"type": "MultiPolygon", "coordinates": []}
                }
 
            # Create buffers and union
@@ -639,13 +639,13 @@ Backend Development
            geojson = mapping(multi_polygon)
 
            return {
-               \"area_km2\": round(area_km2, 2),
-               \"percentage\": round(percentage, 6),
-               \"geojson\": geojson
+               "area_km2": round(area_km2, 2),
+               "percentage": round(percentage, 6),
+               "geojson": geojson
            }
 
        def update_user_coverage(self, user_id: str) -> CoveredArea:
-           \"\"\"Update stored coverage for user\"\"\"
+           """Update stored coverage for user"""
            coverage = self.calculate_user_coverage(user_id)
 
            covered_area = self.db.query(CoveredArea).filter(
@@ -653,13 +653,13 @@ Backend Development
            ).first()
 
            if covered_area:
-               covered_area.area_km2 = coverage[\"area_km2\"]
-               covered_area.geom = from_shape(MultiPolygon(coverage[\"geojson\"]))
+               covered_area.area_km2 = coverage["area_km2"]
+               covered_area.geom = from_shape(MultiPolygon(coverage["geojson"]))
            else:
                covered_area = CoveredArea(
                    user_id=user_id,
-                   area_km2=coverage[\"area_km2\"],
-                   geom=from_shape(MultiPolygon(coverage[\"geojson\"]))
+                   area_km2=coverage["area_km2"],
+                   geom=from_shape(MultiPolygon(coverage["geojson"]))
                )
                self.db.add(covered_area)
 
@@ -682,37 +682,37 @@ Backend Development
 
    router = APIRouter()
 
-   @router.get(\"/coverage\", response_model=CoverageStats)
+   @router.get("/coverage", response_model=CoverageStats)
    def get_coverage_stats(
        db: Session = Depends(deps.get_db),
        current_user: User = Depends(deps.get_current_user)
    ) -> Any:
-       \"\"\"Get user's coverage statistics\"\"\"
+       """Get user's coverage statistics"""
        calculator = AreaCalculator(db)
        coverage = calculator.calculate_user_coverage(str(current_user.id))
        return {
-           \"area_km2\": coverage[\"area_km2\"],
-           \"percentage\": coverage[\"percentage\"]
+           "area_km2": coverage["area_km2"],
+           "percentage": coverage["percentage"]
        }
 
-   @router.get(\"/coverage/details\", response_model=CoverageDetails)
+   @router.get("/coverage/details", response_model=CoverageDetails)
    def get_coverage_details(
        db: Session = Depends(deps.get_db),
        current_user: User = Depends(deps.get_current_user)
    ) -> Any:
-       \"\"\"Get detailed coverage information including GeoJSON\"\"\"
+       """Get detailed coverage information including GeoJSON"""
        calculator = AreaCalculator(db)
        return calculator.calculate_user_coverage(str(current_user.id))
 
-   @router.post(\"/coverage/update\")
+   @router.post("/coverage/update")
    def update_coverage(
        db: Session = Depends(deps.get_db),
        current_user: User = Depends(deps.get_current_user)
    ) -> Any:
-       \"\"\"Force update of user's coverage calculation\"\"\"
+       """Force update of user's coverage calculation"""
        calculator = AreaCalculator(db)
        calculator.update_user_coverage(str(current_user.id))
-       return {\"message\": \"Coverage updated successfully\"}
+       return {"message": "Coverage updated successfully"}
    ```
 
 3. Area Schemas:
@@ -756,12 +756,12 @@ Backend Development
    from app.models.user import User
    from app.core.security import get_password_hash
 
-   SQLALCHEMY_TEST_DATABASE_URL = \"sqlite:///./test.db\"
+   SQLALCHEMY_TEST_DATABASE_URL = "sqlite:///./test.db"
 
    engine = create_engine(SQLALCHEMY_TEST_DATABASE_URL)
    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-   @pytest.fixture(scope=\"function\")
+   @pytest.fixture(scope="function")
    def db() -> Generator:
        Base.metadata.create_all(bind=engine)
        db = TestingSessionLocal()
@@ -771,7 +771,7 @@ Backend Development
            db.close()
            Base.metadata.drop_all(bind=engine)
 
-   @pytest.fixture(scope=\"function\")
+   @pytest.fixture(scope="function")
    def client(db: TestingSessionLocal) -> Generator:
        def override_get_db():
            try:
@@ -783,34 +783,34 @@ Backend Development
        with TestClient(app) as c:
            yield c
 
-   @pytest.fixture(scope=\"function\")
+   @pytest.fixture(scope="function")
    def test_user(db: TestingSessionLocal) -> Dict[str, str]:
-       email = \"test@example.com\"
-       password = \"testpassword123\"
+       email = "test@example.com"
+       password = "testpassword123"
        user = User(
            email=email,
            hashed_password=get_password_hash(password),
-           full_name=\"Test User\"
+           full_name="Test User"
        )
        db.add(user)
        db.commit()
        db.refresh(user)
-       return {\"email\": email, \"password\": password, \"id\": str(user.id)}
+       return {"email": email, "password": password, "id": str(user.id)}
 
-   @pytest.fixture(scope=\"function\")
+   @pytest.fixture(scope="function")
    def test_superuser(db: TestingSessionLocal) -> Dict[str, str]:
-       email = \"admin@example.com\"
-       password = \"admin123\"
+       email = "admin@example.com"
+       password = "admin123"
        user = User(
            email=email,
            hashed_password=get_password_hash(password),
-           full_name=\"Admin User\",
+           full_name="Admin User",
            is_superuser=True
        )
        db.add(user)
        db.commit()
        db.refresh(user)
-       return {\"email\": email, \"password\": password, \"id\": str(user.id)}
+       return {"email": email, "password": password, "id": str(user.id)}
    ```
 
 2. Authentication Tests:
@@ -823,38 +823,38 @@ Backend Development
 
    def test_login(client: TestClient, test_user: dict):
        response = client.post(
-           \"/api/v1/auth/login\",
+           "/api/v1/auth/login",
            data={
-               \"username\": test_user[\"email\"],
-               \"password\": test_user[\"password\"]
+               "username": test_user["email"],
+               "password": test_user["password"]
            }
        )
        assert response.status_code == 200
-       assert \"access_token\" in response.json()
-       assert response.json()[\"token_type\"] == \"bearer\"
+       assert "access_token" in response.json()
+       assert response.json()["token_type"] == "bearer"
 
    def test_login_incorrect_password(client: TestClient, test_user: dict):
        response = client.post(
-           \"/api/v1/auth/login\",
+           "/api/v1/auth/login",
            data={
-               \"username\": test_user[\"email\"],
-               \"password\": \"wrongpassword\"
+               "username": test_user["email"],
+               "password": "wrongpassword"
            }
        )
        assert response.status_code == 400
 
    def test_signup(client: TestClient):
        response = client.post(
-           \"/api/v1/auth/signup\",
+           "/api/v1/auth/signup",
            json={
-               \"email\": \"newuser@example.com\",
-               \"password\": \"newpassword123\",
-               \"full_name\": \"New User\"
+               "email": "newuser@example.com",
+               "password": "newpassword123",
+               "full_name": "New User"
            }
        )
        assert response.status_code == 200
-       assert response.json()[\"email\"] == \"newuser@example.com\"
-       assert response.json()[\"full_name\"] == \"New User\"
+       assert response.json()["email"] == "newuser@example.com"
+       assert response.json()["full_name"] == "New User"
    ```
 
 3. GPX Processing Tests:
@@ -865,23 +865,23 @@ Backend Development
    from datetime import datetime
    from app.services.gpx_processor import GPXProcessor
 
-   SAMPLE_GPX = \"\"\"
-   <?xml version=\"1.0\" encoding=\"UTF-8\"?>
-   <gpx version=\"1.1\">
+   SAMPLE_GPX = """
+   <?xml version="1.0" encoding="UTF-8"?>
+   <gpx version="1.1">
        <trk>
            <trkseg>
-               <trkpt lat=\"47.644548\" lon=\"-122.326897\">
+               <trkpt lat="47.644548" lon="-122.326897">
                    <ele>4.46</ele>
                    <time>2024-01-01T10:00:00Z</time>
                </trkpt>
-               <trkpt lat=\"47.644548\" lon=\"-122.326897\">
+               <trkpt lat="47.644548" lon="-122.326897">
                    <ele>4.94</ele>
                    <time>2024-01-01T10:00:10Z</time>
                </trkpt>
            </trkseg>
        </trk>
    </gpx>
-   \"\"\"
+   """
 
    @pytest.fixture
    def gpx_processor():
@@ -897,15 +897,15 @@ Backend Development
 
    def test_calculate_statistics(gpx_processor):
        stats = gpx_processor.calculate_statistics()
-       assert \"total_distance\" in stats
-       assert \"total_elevation_gain\" in stats
-       assert \"start_time\" in stats
-       assert \"end_time\" in stats
+       assert "total_distance" in stats
+       assert "total_elevation_gain" in stats
+       assert "start_time" in stats
+       assert "end_time" in stats
 
    def test_calculate_covered_area(gpx_processor):
        area_size, area_geojson = gpx_processor.calculate_covered_area()
        assert isinstance(area_size, float)
-       assert area_geojson[\"type\"] == \"MultiPolygon\"
+       assert area_geojson["type"] == "MultiPolygon"
    ```
 
 4. Area Calculation Tests:
@@ -926,11 +926,11 @@ Backend Development
    @pytest.fixture
    def sample_track_points(db: Session, test_user: dict):
        track = GPXTrack(
-           user_id=test_user[\"id\"],
-           filename=\"test.gpx\",
-           original_filename=\"test.gpx\",
+           user_id=test_user["id"],
+           filename="test.gpx",
+           original_filename="test.gpx",
            file_size=1000,
-           status=\"completed\"
+           status="completed"
        )
        db.add(track)
        db.commit()
@@ -949,16 +949,16 @@ Backend Development
        return points
 
    def test_calculate_user_coverage(area_calculator, sample_track_points, test_user: dict):
-       coverage = area_calculator.calculate_user_coverage(test_user[\"id\"])
-       assert \"area_km2\" in coverage
-       assert \"percentage\" in coverage
-       assert \"geojson\" in coverage
-       assert coverage[\"area_km2\"] > 0
+       coverage = area_calculator.calculate_user_coverage(test_user["id"])
+       assert "area_km2" in coverage
+       assert "percentage" in coverage
+       assert "geojson" in coverage
+       assert coverage["area_km2"] > 0
 
    def test_update_user_coverage(area_calculator, sample_track_points, test_user: dict):
-       covered_area = area_calculator.update_user_coverage(test_user[\"id\"])
+       covered_area = area_calculator.update_user_coverage(test_user["id"])
        assert covered_area.area_km2 > 0
-       assert covered_area.user_id == test_user[\"id\"]
+       assert covered_area.user_id == test_user["id"]
    ```
 
 5. API Endpoint Tests:
@@ -972,62 +972,62 @@ Backend Development
 
    def get_auth_headers(client: TestClient, user: dict) -> dict:
        response = client.post(
-           \"/api/v1/auth/login\",
-           data={\"username\": user[\"email\"], \"password\": user[\"password\"]}
+           "/api/v1/auth/login",
+           data={"username": user["email"], "password": user["password"]}
        )
-       token = response.json()[\"access_token\"]
-       return {\"Authorization\": f\"Bearer {token}\"}
+       token = response.json()["access_token"]
+       return {"Authorization": f"Bearer {token}"}
 
    def test_upload_gpx(client: TestClient, test_user: dict):
        headers = get_auth_headers(client, test_user)
 
        # Create a sample GPX file
-       gpx_content = \"\"\"
-       <?xml version=\"1.0\" encoding=\"UTF-8\"?>
-       <gpx version=\"1.1\">
+       gpx_content = """
+       <?xml version="1.0" encoding="UTF-8"?>
+       <gpx version="1.1">
            <trk>
                <trkseg>
-                   <trkpt lat=\"47.644548\" lon=\"-122.326897\">
+                   <trkpt lat="47.644548" lon="-122.326897">
                        <ele>4.46</ele>
                        <time>2024-01-01T10:00:00Z</time>
                    </trkpt>
                </trkseg>
            </trk>
        </gpx>
-       \"\"\"
+       """
 
        files = {
-           \"file\": (\"test.gpx\", gpx_content.encode(), \"application/gpx+xml\")
+           "file": ("test.gpx", gpx_content.encode(), "application/gpx+xml")
        }
 
        response = client.post(
-           \"/api/v1/tracks/upload\",
+           "/api/v1/tracks/upload",
            headers=headers,
            files=files
        )
 
        assert response.status_code == 200
-       assert \"id\" in response.json()
-       assert response.json()[\"status\"] == \"processing\"
+       assert "id" in response.json()
+       assert response.json()["status"] == "processing"
 
    def test_list_tracks(client: TestClient, test_user: dict):
        headers = get_auth_headers(client, test_user)
-       response = client.get(\"/api/v1/tracks/\", headers=headers)
+       response = client.get("/api/v1/tracks/", headers=headers)
        assert response.status_code == 200
        assert isinstance(response.json(), list)
 
    def test_get_coverage_stats(client: TestClient, test_user: dict):
        headers = get_auth_headers(client, test_user)
-       response = client.get(\"/api/v1/areas/coverage\", headers=headers)
+       response = client.get("/api/v1/areas/coverage", headers=headers)
        assert response.status_code == 200
-       assert \"area_km2\" in response.json()
-       assert \"percentage\" in response.json()
+       assert "area_km2" in response.json()
+       assert "percentage" in response.json()
 
    def test_get_coverage_details(client: TestClient, test_user: dict):
        headers = get_auth_headers(client, test_user)
-       response = client.get(\"/api/v1/areas/coverage/details\", headers=headers)
+       response = client.get("/api/v1/areas/coverage/details", headers=headers)
        assert response.status_code == 200
-       assert \"geojson\" in response.json()
+       assert "geojson" in response.json()
    ```
 
 6. Integration Tests:
@@ -1046,59 +1046,59 @@ Backend Development
        headers = get_auth_headers(client, test_user)
 
        # 2. Upload GPX file
-       gpx_content = \"\"\"
-       <?xml version=\"1.0\" encoding=\"UTF-8\"?>
-       <gpx version=\"1.1\">
+       gpx_content = """
+       <?xml version="1.0" encoding="UTF-8"?>
+       <gpx version="1.1">
            <trk>
                <trkseg>
-                   <trkpt lat=\"47.644548\" lon=\"-122.326897\">
+                   <trkpt lat="47.644548" lon="-122.326897">
                        <ele>4.46</ele>
                        <time>2024-01-01T10:00:00Z</time>
                    </trkpt>
-                   <trkpt lat=\"47.644648\" lon=\"-122.326997\">
+                   <trkpt lat="47.644648" lon="-122.326997">
                        <ele>4.94</ele>
                        <time>2024-01-01T10:00:10Z</time>
                    </trkpt>
                </trkseg>
            </trk>
        </gpx>
-       \"\"\"
+       """
 
        files = {
-           \"file\": (\"test.gpx\", gpx_content.encode(), \"application/gpx+xml\")
+           "file": ("test.gpx", gpx_content.encode(), "application/gpx+xml")
        }
 
        upload_response = client.post(
-           \"/api/v1/tracks/upload\",
+           "/api/v1/tracks/upload",
            headers=headers,
            files=files
        )
        assert upload_response.status_code == 200
-       track_id = upload_response.json()[\"id\"]
+       track_id = upload_response.json()["id"]
 
        # 3. Wait for processing
        max_attempts = 10
        for _ in range(max_attempts):
            track_response = client.get(
-               f\"/api/v1/tracks/{track_id}\",
+               f"/api/v1/tracks/{track_id}",
                headers=headers
            )
-           if track_response.json()[\"status\"] == \"completed\":
+           if track_response.json()["status"] == "completed":
                break
            time.sleep(1)
 
        # 4. Check coverage
        coverage_response = client.get(
-           \"/api/v1/areas/coverage/details\",
+           "/api/v1/areas/coverage/details",
            headers=headers
        )
        assert coverage_response.status_code == 200
        coverage = coverage_response.json()
-       assert coverage[\"area_km2\"] > 0
+       assert coverage["area_km2"] > 0
 
        # 5. Verify track points
        track_points_response = client.get(
-           f\"/api/v1/tracks/{track_id}/points\",
+           f"/api/v1/tracks/{track_id}/points",
            headers=headers
        )
        assert track_points_response.status_code == 200
@@ -1110,109 +1110,109 @@ Backend Development
 
        # Test invalid GPX file
        files = {
-           \"file\": (\"test.gpx\", b\"invalid content\", \"application/gpx+xml\")
+           "file": ("test.gpx", b"invalid content", "application/gpx+xml")
        }
 
      response = client.post(
-           \"/api/v1/tracks/upload\",
+           "/api/v1/tracks/upload",
            headers=headers,
            files=files
        )
        assert response.status_code == 400
 
        # Test file size limits
-       large_content = \"x\" * (10 * 1024 * 1024)  # 10MB file
+       large_content = "x" * (10 * 1024 * 1024)  # 10MB file
        files = {
-           \"file\": (\"large.gpx\", large_content.encode(), \"application/gpx+xml\")
+           "file": ("large.gpx", large_content.encode(), "application/gpx+xml")
        }
        response = client.post(
-           \"/api/v1/tracks/upload\",
+           "/api/v1/tracks/upload",
            headers=headers,
            files=files
        )
        assert response.status_code == 413
 
    def test_concurrent_uploads(client: TestClient, test_user: dict):
-       \"\"\"Test handling multiple uploads simultaneously\"\"\"
+       """Test handling multiple uploads simultaneously"""
        headers = get_auth_headers(client, test_user)
 
-       gpx_content = \"\"\"
-       <?xml version=\"1.0\" encoding=\"UTF-8\"?>
-       <gpx version=\"1.1\">
+       gpx_content = """
+       <?xml version="1.0" encoding="UTF-8"?>
+       <gpx version="1.1">
            <trk>
                <trkseg>
-                   <trkpt lat=\"47.644548\" lon=\"-122.326897\">
+                   <trkpt lat="47.644548" lon="-122.326897">
                        <ele>4.46</ele>
                        <time>2024-01-01T10:00:00Z</time>
                    </trkpt>
                </trkseg>
            </trk>
        </gpx>
-       \"\"\"
+       """
 
        # Upload multiple files
        track_ids = []
        for i in range(3):
            files = {
-               \"file\": (f\"test_{i}.gpx\", gpx_content.encode(), \"application/gpx+xml\")
+               "file": (f"test_{i}.gpx", gpx_content.encode(), "application/gpx+xml")
            }
            response = client.post(
-               \"/api/v1/tracks/upload\",
+               "/api/v1/tracks/upload",
                headers=headers,
                files=files
            )
            assert response.status_code == 200
-           track_ids.append(response.json()[\"id\"])
+           track_ids.append(response.json()["id"])
 
        # Wait for all processing to complete
        max_attempts = 10
        for track_id in track_ids:
            for _ in range(max_attempts):
                response = client.get(
-                   f\"/api/v1/tracks/{track_id}\",
+                   f"/api/v1/tracks/{track_id}",
                    headers=headers
                )
-               if response.json()[\"status\"] == \"completed\":
+               if response.json()["status"] == "completed":
                    break
                time.sleep(1)
 
-           assert response.json()[\"status\"] == \"completed\"
+           assert response.json()["status"] == "completed"
 
    def test_area_updates(client: TestClient, test_user: dict):
-       \"\"\"Test area calculations after multiple track uploads\"\"\"
+       """Test area calculations after multiple track uploads"""
        headers = get_auth_headers(client, test_user)
 
        # Get initial coverage
        initial_coverage = client.get(
-           \"/api/v1/areas/coverage\",
+           "/api/v1/areas/coverage",
            headers=headers
        ).json()
 
        # Upload a track
-       gpx_content = \"\"\"
-       <?xml version=\"1.0\" encoding=\"UTF-8\"?>
-       <gpx version=\"1.1\">
+       gpx_content = """
+       <?xml version="1.0" encoding="UTF-8"?>
+       <gpx version="1.1">
            <trk>
                <trkseg>
-                   <trkpt lat=\"47.644548\" lon=\"-122.326897\">
+                   <trkpt lat="47.644548" lon="-122.326897">
                        <ele>4.46</ele>
                        <time>2024-01-01T10:00:00Z</time>
                    </trkpt>
-                   <trkpt lat=\"47.644648\" lon=\"-122.326997\">
+                   <trkpt lat="47.644648" lon="-122.326997">
                        <ele>4.94</ele>
                        <time>2024-01-01T10:00:10Z</time>
                    </trkpt>
                </trkseg>
            </trk>
        </gpx>
-       \"\"\"
+       """
 
        files = {
-           \"file\": (\"test.gpx\", gpx_content.encode(), \"application/gpx+xml\")
+           "file": ("test.gpx", gpx_content.encode(), "application/gpx+xml")
        }
 
        response = client.post(
-           \"/api/v1/tracks/upload\",
+           "/api/v1/tracks/upload",
            headers=headers,
            files=files
        )
@@ -1223,11 +1223,11 @@ Backend Development
 
        # Get updated coverage
        final_coverage = client.get(
-           \"/api/v1/areas/coverage\",
+           "/api/v1/areas/coverage",
            headers=headers
        ).json()
 
-       assert final_coverage[\"area_km2\"] > initial_coverage[\"area_km2\"]
+       assert final_coverage["area_km2"] > initial_coverage["area_km2"]
    ```
 
 7. Performance Tests:
@@ -1241,41 +1241,41 @@ Backend Development
    from app.services.gpx_processor import GPXProcessor
 
    def test_area_calculation_performance(db: Session, test_user: dict):
-       \"\"\"Test performance of area calculations with large datasets\"\"\"
+       """Test performance of area calculations with large datasets"""
        calculator = AreaCalculator(db)
 
        # Create multiple track points
        points = [(i/100, i/100) for i in range(1000)]  # 1000 points
 
        start_time = time.time()
-       coverage = calculator.calculate_user_coverage(test_user[\"id\"])
+       coverage = calculator.calculate_user_coverage(test_user["id"])
        end_time = time.time()
 
        assert (end_time - start_time) < 5  # Should complete within 5 seconds
 
    def test_gpx_processing_performance():
-       \"\"\"Test performance of GPX file processing\"\"\"
+       """Test performance of GPX file processing"""
        # Generate large GPX content
-       gpx_content = \"\"\"
-       <?xml version=\"1.0\" encoding=\"UTF-8\"?>
-       <gpx version=\"1.1\">
+       gpx_content = """
+       <?xml version="1.0" encoding="UTF-8"?>
+       <gpx version="1.1">
            <trk>
                <trkseg>
-       \"\"\"
+       """
 
        for i in range(1000):
-           gpx_content += f\"\"\"
-               <trkpt lat=\"{i/100}\" lon=\"{i/100}\">
+           gpx_content += f"""
+               <trkpt lat="{i/100}" lon="{i/100}">
                    <ele>{i}</ele>
                    <time>2024-01-01T10:00:{i:02d}Z</time>
                </trkpt>
-           \"\"\"
+           """
 
-       gpx_content += \"\"\"
+       gpx_content += """
                </trkseg>
            </trk>
        </gpx>
-       \"\"\"
+       """
 
        start_time = time.time()
        processor = GPXProcessor(gpx_content.encode())
@@ -1300,7 +1300,7 @@ Backend Development
            --cov-report=term-missing
            --cov-report=html
    markers =
-       slow: marks tests as slow (deselect with '-m \"not slow\"')
+       slow: marks tests as slow (deselect with '-m "not slow"')
        integration: marks tests as integration tests
    ```
 
@@ -1317,60 +1317,60 @@ Backend Development
    from app.core.security import create_access_token
 
    def create_test_gpx(points: list) -> str:
-       \"\"\"Create a GPX file with given points\"\"\"
-       gpx_content = \"\"\"<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-       <gpx version=\"1.1\">
+       """Create a GPX file with given points"""
+       gpx_content = """<?xml version="1.0" encoding="UTF-8"?>
+       <gpx version="1.1">
            <trk>
                <trkseg>
-       \"\"\"
+       """
 
        for lat, lon in points:
-           gpx_content += f\"\"\"
-               <trkpt lat=\"{lat}\" lon=\"{lon}\">
+           gpx_content += f"""
+               <trkpt lat="{lat}" lon="{lon}">
                    <ele>100.0</ele>
                    <time>{datetime.utcnow().isoformat()}Z</time>
                </trkpt>
-           \"\"\"
+           """
 
-       gpx_content += \"\"\"
+       gpx_content += """
                </trkseg>
            </trk>
        </gpx>
-       \"\"\"
+       """
        return gpx_content
 
    def create_temp_gpx_file(points: list) -> str:
-       \"\"\"Create a temporary GPX file and return its path\"\"\"
+       """Create a temporary GPX file and return its path"""
        content = create_test_gpx(points)
        with tempfile.NamedTemporaryFile(delete=False, suffix='.gpx') as tmp:
            tmp.write(content.encode())
            return tmp.name
 
    def get_test_token(user_id: str) -> str:
-       \"\"\"Create a test JWT token\"\"\"
+       """Create a test JWT token"""
        access_token_expires = timedelta(minutes=60)
        return create_access_token(
            subject=user_id, expires_delta=access_token_expires
        )
 
    def mock_gpx_processor_response() -> Dict[str, Any]:
-       \"\"\"Create mock GPX processor response for testing\"\"\"
+       """Create mock GPX processor response for testing"""
        return {
-           \"statistics\": {
-               \"total_distance\": 1000.0,
-               \"total_elevation_gain\": 100.0,
-               \"start_time\": datetime.utcnow(),
-               \"end_time\": datetime.utcnow() + timedelta(hours=1)
+           "statistics": {
+               "total_distance": 1000.0,
+               "total_elevation_gain": 100.0,
+               "start_time": datetime.utcnow(),
+               "end_time": datetime.utcnow() + timedelta(hours=1)
            },
-           \"points\": [
+           "points": [
                (0.0, 0.0, 100.0, datetime.utcnow()),
                (0.1, 0.1, 110.0, datetime.utcnow() + timedelta(minutes=30))
            ],
-           \"area\": {
-               \"size\": 1.5,
-               \"geojson\": {
-                   \"type\": \"MultiPolygon\",
-                   \"coordinates\": [[[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]]
+           "area": {
+               "size": 1.5,
+               "geojson": {
+                   "type": "MultiPolygon",
+                   "coordinates": [[[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]]
                }
            }
        }
@@ -1417,7 +1417,7 @@ Backend Development
 
     4. Run tests by marker:
        ```bash
-       poetry run pytest -m \"not slow\"  # Skip slow tests
+       poetry run pytest -m "not slow"  # Skip slow tests
        poetry run pytest -m integration  # Run only integration tests
        ```
 
@@ -1443,10 +1443,10 @@ Backend Development
 11. Add test scripts to pyproject.toml:
     ```toml
     [tool.poetry.scripts]
-    test = \"pytest\"
-    test-cov = \"pytest --cov=app --cov-report=html\"
-    test-fast = \"pytest -m 'not slow'\"
-    test-integration = \"pytest -m integration\"
+    test = "pytest"
+    test-cov = "pytest --cov=app --cov-report=html"
+    test-fast = "pytest -m 'not slow'"
+    test-integration = "pytest -m integration"
     ```
 
 # Backend Test Suite Complete
