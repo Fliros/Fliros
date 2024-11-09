@@ -580,45 +580,125 @@
 ## Part 3: Controls and Interactivity
 
 1. Complete Map Controls Component:
-   src/features/map/components/MapControls.tsx (continued):
+   src/features/map/components/MapControls.tsx:
 
-   ```typescript
-               <option value="terrain">Terrain</option>
-             </select>
-           </div>
+```typescript
+import React from 'react';
+import { useMap } from 'react-leaflet';
+import { useSettingsStore } from '@/stores/settingsStore';
+import { useMapState } from '../hooks/useMapState';
 
-           <div className="border-t border-gray-200 pt-2">
-             <label className="block text-sm font-medium text-gray-700 mb-1">
-               Layer Visibility
-             </label>
-             <div className="space-y-1">
-               <label className="flex items-center space-x-2">
-                 <input
-                   type="checkbox"
-                   checked={showCoveredAreas}
-                   onChange={(e) => setShowCoveredAreas(e.target.checked)}
-                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                 />
-                 <span className="text-sm">Covered Areas</span>
-               </label>
-               <label className="flex items-center space-x-2">
-                 <input
-                   type="checkbox"
-                   checked={showTracks}
-                   onChange={(e) => setShowTracks(e.target.checked)}
-                   className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                 />
-                 <span className="text-sm">Tracks</span>
-               </label>
-             </div>
-           </div>
-         </div>
-       </div>
-     );
-   };
+const MapControls: React.FC = () => {
+  const map = useMap();
+  const { mapStyle, setMapStyle } = useSettingsStore();
+  const {
+    showCoveredAreas,
+    setShowCoveredAreas,
+    showTracks,
+    setShowTracks
+  } = useMapState();
 
-   export default MapControls;
-   ```
+  const handleZoomToWorld = () => {
+    map.setView([0, 0], 2);
+  };
+
+  const handleLocateMe = () => {
+    map.locate({ setView: true, maxZoom: 16 });
+  };
+
+  return (
+    <div className=\"absolute top-4 left-4 bg-white rounded-lg shadow-lg p-2 z-[1000]\">
+      <div className=\"space-y-2\">
+        <button
+          onClick={handleZoomToWorld}
+          className=\"p-2 hover:bg-gray-100 rounded-lg w-full text-left\"
+          title=\"Zoom to World\"
+        >
+          <svg className=\"w-5 h-5 inline-block mr-2\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+            <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z\" />
+          </svg>
+          World View
+        </button>
+
+        <button
+          onClick={handleLocateMe}
+          className=\"p-2 hover:bg-gray-100 rounded-lg w-full text-left\"
+          title=\"Locate Me\"
+        >
+          <svg className=\"w-5 h-5 inline-block mr-2\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+            <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\" />
+            <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\" />
+          </svg>
+          Locate Me
+        </button>
+
+        <div className=\"border-t border-gray-200 pt-2\">
+          <select
+            value={mapStyle}
+            onChange={(e) => setMapStyle(e.target.value as 'standard' | 'satellite' | 'terrain')}
+            className=\"w-full p-2 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500\"
+          >
+            <option value=\"standard\">Standard Map</option>
+            <option value=\"satellite\">Satellite</option>
+            <option value=\"terrain\">Terrain</option>
+          </select>
+        </div>
+
+        <div className=\"border-t border-gray-200 pt-2\">
+          <label className=\"block text-sm font-medium text-gray-700 mb-1\">
+            Layer Visibility
+          </label>
+          <div className=\"space-y-1\">
+            <label className=\"flex items-center space-x-2\">
+              <input
+                type=\"checkbox\"
+                checked={showCoveredAreas}
+                onChange={(e) => setShowCoveredAreas(e.target.checked)}
+                className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\"
+              />
+              <span className=\"text-sm\">Covered Areas</span>
+            </label>
+            <label className=\"flex items-center space-x-2\">
+              <input
+                type=\"checkbox\"
+                checked={showTracks}
+                onChange={(e) => setShowTracks(e.target.checked)}
+                className=\"rounded border-gray-300 text-blue-600 focus:ring-blue-500\"
+              />
+              <span className=\"text-sm\">Tracks</span>
+            </label>
+          </div>
+        </div>
+
+        <div className=\"border-t border-gray-200 pt-2\">
+          <button
+            onClick={() => map.zoomIn()}
+            className=\"p-2 hover:bg-gray-100 rounded-lg w-full text-left\"
+            title=\"Zoom In\"
+          >
+            <svg className=\"w-5 h-5 inline-block mr-2\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+              <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M12 6v6m0 0v6m0-6h6m-6 0H6\" />
+            </svg>
+            Zoom In
+          </button>
+          <button
+            onClick={() => map.zoomOut()}
+            className=\"p-2 hover:bg-gray-100 rounded-lg w-full text-left\"
+            title=\"Zoom Out\"
+          >
+            <svg className=\"w-5 h-5 inline-block mr-2\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
+              <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M20 12H4\" />
+            </svg>
+            Zoom Out
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MapControls;
+```
 
 2. Add Info Popup Component:
    src/features/map/components/InfoPopup.tsx:
