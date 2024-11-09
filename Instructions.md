@@ -143,7 +143,7 @@ Python dependency management installation:
 - EACCES error: Use nvm or fix npm permissions
 - Module not found: Run `npm install` in frontend directory
 
-## **Note**: If you encounter any issues or need to modify the configuration, refer to the troubleshooting section or the official documentation of the respective tools.
+**Note**: If you encounter any issues or need to modify the configuration, refer to the troubleshooting section or the official documentation of the respective tools.
 
 ---
 
