@@ -1667,7 +1667,7 @@ const WeatherOverlay: React.FC = () => {
 
 1. Advanced Event Handling:
 
-````typescript
+```typescript
 // src/features/map/hooks/useMapEvents.ts
 interface MapEventHandlers {
   onClick?: (e: L.LeafletMouseEvent) => void;
@@ -1684,23 +1684,27 @@ export const useMapEvents = (map: L.Map | null, handlers: MapEventHandlers) => {
     if (!map) return;
 
     // Add event listeners
-    if (handlers.onClick) map.on('click', handlers.onClick);
-    if (handlers.onDragEnd) map.on('dragend', handlers.onDragEnd);
-    if (handlers.onZoomEnd) map.on('zoomend', handlers.onZoomEnd);
-    if (handlers.onMoveEnd) map.on('moveend', handlers.onMoveEnd);
-    if (handlers.onLayerAdd) map.on('layeradd', handlers.onLayerAdd);
-    if (handlers.onLocationFound) map.on('locationfound', handlers.onLocationFound);
-    if (handlers.onLocationError) map.on('locationerror', handlers.onLocationError);
+    if (handlers.onClick) map.on("click", handlers.onClick);
+    if (handlers.onDragEnd) map.on("dragend", handlers.onDragEnd);
+    if (handlers.onZoomEnd) map.on("zoomend", handlers.onZoomEnd);
+    if (handlers.onMoveEnd) map.on("moveend", handlers.onMoveEnd);
+    if (handlers.onLayerAdd) map.on("layeradd", handlers.onLayerAdd);
+    if (handlers.onLocationFound)
+      map.on("locationfound", handlers.onLocationFound);
+    if (handlers.onLocationError)
+      map.on("locationerror", handlers.onLocationError);
 
     // Cleanup
     return () => {
-      if (handlers.onClick) map.off('click', handlers.onClick);
-      if (handlers.onDragEnd) map.off('dragend', handlers.onDragEnd);
-      if (handlers.onZoomEnd) map.off('zoomend', handlers.onZoomEnd);
-      if (handlers.onMoveEnd) map.off('moveend', handlers.onMoveEnd);
-      if (handlers.onLayerAdd) map.off('layeradd', handlers.onLayerAdd);
-      if (handlers.onLocationFound) map.off('locationfound', handlers.onLocationFound);
-      if (handlers.onLocationError) map.off('locationerror', handlers.onLocationError);
+      if (handlers.onClick) map.off("click", handlers.onClick);
+      if (handlers.onDragEnd) map.off("dragend", handlers.onDragEnd);
+      if (handlers.onZoomEnd) map.off("zoomend", handlers.onZoomEnd);
+      if (handlers.onMoveEnd) map.off("moveend", handlers.onMoveEnd);
+      if (handlers.onLayerAdd) map.off("layeradd", handlers.onLayerAdd);
+      if (handlers.onLocationFound)
+        map.off("locationfound", handlers.onLocationFound);
+      if (handlers.onLocationError)
+        map.off("locationerror", handlers.onLocationError);
     };
   }, [map, handlers]);
 };
@@ -1729,10 +1733,12 @@ const Map: React.FC<MapProps> = ({ onViewportChange, onFeatureClick }) => {
 
   // ... rest of the component
 };
+```
 
 2. Interactive Features:
+   // src/features/map/components/InteractiveTrack.tsx
+
 ```typescript
-// src/features/map/components/InteractiveTrack.tsx
 interface InteractiveTrackProps {
   points: TrackPoint[];
   selected: boolean;
@@ -1787,8 +1793,10 @@ const InteractiveTrack: React.FC<InteractiveTrackProps> = ({
     </>
   );
 };
+```
 
 3. Custom Draw Controls:
+
 ```typescript
 // src/features/map/components/DrawControls.tsx
 interface DrawControlsProps {
@@ -1796,7 +1804,10 @@ interface DrawControlsProps {
   onLineDrawn: (line: GeoJSON.LineString) => void;
 }
 
-const DrawControls: React.FC<DrawControlsProps> = ({ onAreaDrawn, onLineDrawn }) => {
+const DrawControls: React.FC<DrawControlsProps> = ({
+  onAreaDrawn,
+  onLineDrawn,
+}) => {
   const map = useMap();
   const drawRef = useRef<L.Control.Draw | null>(null);
 
@@ -1823,9 +1834,9 @@ const DrawControls: React.FC<DrawControlsProps> = ({ onAreaDrawn, onLineDrawn })
       const layer = e.layer;
       const geoJSON = layer.toGeoJSON();
 
-      if (geoJSON.geometry.type === 'Polygon') {
+      if (geoJSON.geometry.type === "Polygon") {
         onAreaDrawn(geoJSON.geometry);
-      } else if (geoJSON.geometry.type === 'LineString') {
+      } else if (geoJSON.geometry.type === "LineString") {
         onLineDrawn(geoJSON.geometry);
       }
     });
@@ -1839,4 +1850,4 @@ const DrawControls: React.FC<DrawControlsProps> = ({ onAreaDrawn, onLineDrawn })
 
   return null;
 };
-````
+```
