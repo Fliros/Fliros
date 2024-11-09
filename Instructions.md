@@ -122,7 +122,6 @@ C. Create Python virtual environment:
 
 ```bash
 # Create project directory
-mkdir gpx-tracker
 cd gpx-tracker
 
 # Initialize Poetry project
@@ -152,40 +151,38 @@ A. Install Node.js:
 
 1. Create Main Project Directory:
 
-   ```bash
-   mkdir gpx-tracker
-   cd gpx-tracker
-
-   # Create the basic structure
-   mkdir -p backend/app/{api,models,schemas,services,tests}
-   mkdir -p frontend/src/{components,pages,services,hooks,utils}
-   mkdir -p docker/{postgres,backend,frontend}
-   ```
+```bash
+cd gpx-tracker
+# Create the basic structure
+mkdir -p backend/app/{api,models,schemas,services,tests}
+mkdir -p frontend/src/{components,pages,services,hooks,utils}
+mkdir -p docker/{postgres,backend,frontend}
+```
 
 2. Initialize Frontend:
 
-   ```bash
-   # Move into frontend directory
-   cd frontend
+```bash
+# Move into frontend directory
+cd frontend
 
-   # Initialize Vite project in the current directory
-   npm create vite@latest . -- --template react-ts
+# Initialize Vite project in the current directory
+npm create vite@latest . -- --template react-ts
 
-   # Install dependencies
-   npm install
-   npm install leaflet @types/leaflet axios react-query tailwindcss postcss autoprefixer
-   npm install --save-dev jest @testing-library/react @testing-library/jest-dom
-   ```
+# Install dependencies
+npm install
+npm install leaflet @types/leaflet axios react-query tailwindcss postcss autoprefixer
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+```
 
 3. Initialize Backend:
 
-   ```bash
-   # Move to backend directory
-   cd ../backend
+```bash
+# Move to backend directory
+cd ../backend
 
-   # Initialize Poetry project
-   poetry init
-   ```
+# Initialize Poetry project
+poetry init
+```
 
 This approach ensures:
 
