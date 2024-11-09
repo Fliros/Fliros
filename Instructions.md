@@ -58,6 +58,8 @@ Add to settings.json:
 
 ### Git
 
+- Install GitHub Desktop from: https://desktop.github.com/
+
 - Windows: Download from https://git-scm.com/download/windows
 - macOS: `brew install git`
 - Linux: `sudo apt-get install git`
@@ -143,4 +145,4 @@ Python dependency management installation:
 
 ---
 
-**Note**: For detailed project initialization, structure setup, and configuration steps, refer to Proj_init.md.
+**Note**: For detailed project initialization, structure setup, and configuration steps, refer to [Project Initialization](Proj_init.md).
