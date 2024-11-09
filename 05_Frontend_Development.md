@@ -19,36 +19,36 @@ Frontend Development
 
    ```json
    {
-     \"compilerOptions\": {
-       \"target\": \"ES2020\",
-       \"useDefineForClassFields\": true,
-       \"lib\": [\"ES2020\", \"DOM\", \"DOM.Iterable\"],
-       \"module\": \"ESNext\",
-       \"skipLibCheck\": true,
-       \"moduleResolution\": \"bundler\",
-       \"allowImportingTsExtensions\": true,
-       \"resolveJsonModule\": true,
-       \"isolatedModules\": true,
-       \"noEmit\": true,
-       \"jsx\": \"react-jsx\",
-       \"strict\": true,
-       \"noUnusedLocals\": true,
-       \"noUnusedParameters\": true,
-       \"noFallthroughCasesInSwitch\": true,
-       \"baseUrl\": \".\",
-       \"paths\": {
-         \"@/*\": [\"src/*\"],
-         \"@components/*\": [\"src/components/*\"],
-         \"@features/*\": [\"src/features/*\"],
-         \"@hooks/*\": [\"src/hooks/*\"],
-         \"@services/*\": [\"src/services/*\"],
-         \"@utils/*\": [\"src/utils/*\"],
-         \"@types/*\": [\"src/types/*\"],
-         \"@stores/*\": [\"src/stores/*\"]
+     "compilerOptions": {
+       "target": "ES2020",
+       "useDefineForClassFields": true,
+       "lib": ["ES2020", "DOM", "DOM.Iterable"],
+       "module": "ESNext",
+       "skipLibCheck": true,
+       "moduleResolution": "bundler",
+       "allowImportingTsExtensions": true,
+       "resolveJsonModule": true,
+       "isolatedModules": true,
+       "noEmit": true,
+       "jsx": "react-jsx",
+       "strict": true,
+       "noUnusedLocals": true,
+       "noUnusedParameters": true,
+       "noFallthroughCasesInSwitch": true,
+       "baseUrl": ".",
+       "paths": {
+         "@/*": ["src/*"],
+         "@components/*": ["src/components/*"],
+         "@features/*": ["src/features/*"],
+         "@hooks/*": ["src/hooks/*"],
+         "@services/*": ["src/services/*"],
+         "@utils/*": ["src/utils/*"],
+         "@types/*": ["src/types/*"],
+         "@stores/*": ["src/stores/*"]
        }
      },
-     \"include\": [\"src\"],
-     \"references\": [{ \"path\": \"./tsconfig.node.json\" }]
+     "include": ["src"],
+     "references": [{ "path": "./tsconfig.node.json" }]
    }
    ```
 
@@ -205,25 +205,25 @@ Frontend Development
    src/layouts/MainLayout.tsx:
 
    ```typescript
-   import React from 'react';
-   import { Outlet, Navigate } from 'react-router-dom';
-   import { useAuthStore } from '@/stores/authStore';
-   import Navbar from '@/components/Navbar';
-   import Sidebar from '@/components/Sidebar';
+   import React from "react";
+   import { Outlet, Navigate } from "react-router-dom";
+   import { useAuthStore } from "@/stores/authStore";
+   import Navbar from "@/components/Navbar";
+   import Sidebar from "@/components/Sidebar";
 
    const MainLayout: React.FC = () => {
      const { isAuthenticated } = useAuthStore();
 
      if (!isAuthenticated) {
-       return <Navigate to=\"/login\" replace />;
+       return <Navigate to="/login" replace />;
      }
 
      return (
-       <div className=\"min-h-screen bg-gray-100\">
+       <div className="min-h-screen bg-gray-100">
          <Navbar />
-         <div className=\"flex\">
+         <div className="flex">
            <Sidebar />
-           <main className=\"flex-1 p-6\">
+           <main className="flex-1 p-6">
              <Outlet />
            </main>
          </div>
@@ -240,15 +240,15 @@ Frontend Development
    src/App.tsx:
 
    ```typescript
-   import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-   import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-   import MainLayout from '@/layouts/MainLayout';
-   import Login from '@/features/auth/Login';
-   import Signup from '@/features/auth/Signup';
-   import Dashboard from '@/features/dashboard/Dashboard';
-   import Tracks from '@/features/tracks/Tracks';
-   import Upload from '@/features/upload/Upload';
-   import Map from '@/features/map/Map';
+   import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+   import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+   import MainLayout from "@/layouts/MainLayout";
+   import Login from "@/features/auth/Login";
+   import Signup from "@/features/auth/Signup";
+   import Dashboard from "@/features/dashboard/Dashboard";
+   import Tracks from "@/features/tracks/Tracks";
+   import Upload from "@/features/upload/Upload";
+   import Map from "@/features/map/Map";
 
    const queryClient = new QueryClient();
 
@@ -257,14 +257,14 @@ Frontend Development
        <QueryClientProvider client={queryClient}>
          <BrowserRouter>
            <Routes>
-             <Route path=\"/login\" element={<Login />} />
-             <Route path=\"/signup\" element={<Signup />} />
+             <Route path="/login" element={<Login />} />
+             <Route path="/signup" element={<Signup />} />
              <Route element={<MainLayout />}>
-               <Route path=\"/\" element={<Navigate to=\"/dashboard\" replace />} />
-               <Route path=\"/dashboard\" element={<Dashboard />} />
-               <Route path=\"/tracks\" element={<Tracks />} />
-               <Route path=\"/upload\" element={<Upload />} />
-               <Route path=\"/map\" element={<Map />} />
+               <Route path="/" element={<Navigate to="/dashboard" replace />} />
+               <Route path="/dashboard" element={<Dashboard />} />
+               <Route path="/tracks" element={<Tracks />} />
+               <Route path="/upload" element={<Upload />} />
+               <Route path="/map" element={<Map />} />
              </Route>
            </Routes>
          </BrowserRouter>
@@ -279,10 +279,10 @@ Frontend Development
    src/features/auth/Login.tsx:
 
    ```typescript
-   import React from 'react';
-   import { useNavigate, Link } from 'react-router-dom';
-   import { useForm } from 'react-hook-form';
-   import { useAuthStore } from '@/stores/authStore';
+   import React from "react";
+   import { useNavigate, Link } from "react-router-dom";
+   import { useForm } from "react-hook-form";
+   import { useAuthStore } from "@/stores/authStore";
 
    interface LoginForm {
      email: string;
@@ -292,54 +292,69 @@ Frontend Development
    const Login: React.FC = () => {
      const navigate = useNavigate();
      const { login } = useAuthStore();
-     const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
+     const {
+       register,
+       handleSubmit,
+       formState: { errors },
+     } = useForm<LoginForm>();
 
      const onSubmit = async (data: LoginForm) => {
        try {
          await login(data.email, data.password);
-         navigate('/dashboard');
+         navigate("/dashboard");
        } catch (error) {
-         console.error('Login failed:', error);
+         console.error("Login failed:", error);
        }
      };
 
      return (
-       <div className=\"min-h-screen flex items-center justify-center bg-gray-100\">
-         <div className=\"max-w-md w-full p-6 bg-white rounded-lg shadow-md\">
-           <h2 className=\"text-2xl font-bold text-center mb-6\">Login</h2>
-           <form onSubmit={handleSubmit(onSubmit)} className=\"space-y-4\">
+       <div className="min-h-screen flex items-center justify-center bg-gray-100">
+         <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md">
+           <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
+           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
              <div>
-               <label className=\"block text-sm font-medium text-gray-700\">Email</label>
+               <label className="block text-sm font-medium text-gray-700">
+                 Email
+               </label>
                <input
-                 type=\"email\"
-                 {...register('email', { required: true, pattern: /^\\S+@\\S+\\.\\S+$/ })}
-                 className=\"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500\"
+                 type="email"
+                 {...register("email", {
+                   required: true,
+                   pattern: /^\\S+@\\S+\\.\\S+$/,
+                 })}
+                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                />
                {errors.email && (
-                 <span className=\"text-red-500 text-sm\">Valid email is required</span>
+                 <span className="text-red-500 text-sm">
+                   Valid email is required
+                 </span>
                )}
              </div>
              <div>
-               <label className=\"block text-sm font-medium text-gray-700\">Password</label>
+               <label className="block text-sm font-medium text-gray-700">
+                 Password
+               </label>
                <input
-                 type=\"password\"
-                 {...register('password', { required: true, minLength: 6 })}
-                 className=\"mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500\"
+                 type="password"
+                 {...register("password", { required: true, minLength: 6 })}
+                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                />
                {errors.password && (
-                 <span className=\"text-red-500 text-sm\">Password must be at least 6 characters</span>
+                 <span className="text-red-500 text-sm">
+                   Password must be at least 6 characters
+                 </span>
                )}
              </div>
              <button
-               type=\"submit\"
-               className=\"w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2\"
+               type="submit"
+               className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
              >
                Login
              </button>
            </form>
-           <p className=\"mt-4 text-center text-sm text-gray-600\">
-             Don't have an account?{' '}
-             <Link to=\"/signup\" className=\"text-blue-600 hover:text-blue-500\">
+           <p className="mt-4 text-center text-sm text-gray-600">
+             Don't have an account?{" "}
+             <Link to="/signup" className="text-blue-600 hover:text-blue-500">
                Sign up
              </Link>
            </p>
@@ -377,49 +392,49 @@ Frontend Development
    src/components/Navbar.tsx:
 
    ```typescript
-   import React from 'react';
-   import { Link } from 'react-router-dom';
-   import { useAuthStore } from '@/stores/authStore';
+   import React from "react";
+   import { Link } from "react-router-dom";
+   import { useAuthStore } from "@/stores/authStore";
 
    const Navbar: React.FC = () => {
      const { user, logout } = useAuthStore();
 
      return (
-       <nav className=\"bg-white shadow-sm\">
-         <div className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\">
-           <div className=\"flex justify-between h-16\">
-             <div className=\"flex\">
-               <div className=\"flex-shrink-0 flex items-center\">
-                 <Link to=\"/\" className=\"text-xl font-bold text-blue-600\">
+       <nav className="bg-white shadow-sm">
+         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+           <div className="flex justify-between h-16">
+             <div className="flex">
+               <div className="flex-shrink-0 flex items-center">
+                 <Link to="/" className="text-xl font-bold text-blue-600">
                    GPX Tracker
                  </Link>
                </div>
-               <div className=\"hidden sm:ml-6 sm:flex sm:space-x-8\">
+               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                  <Link
-                   to=\"/dashboard\"
-                   className=\"border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium\"
+                   to="/dashboard"
+                   className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                  >
                    Dashboard
                  </Link>
                  <Link
-                   to=\"/tracks\"
-                   className=\"border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium\"
+                   to="/tracks"
+                   className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                  >
                    Tracks
                  </Link>
                  <Link
-                   to=\"/map\"
-                   className=\"border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium\"
+                   to="/map"
+                   className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                  >
                    Map
                  </Link>
                </div>
              </div>
-             <div className=\"flex items-center\">
-               <span className=\"text-gray-700 mr-4\">{user?.fullName}</span>
+             <div className="flex items-center">
+               <span className="text-gray-700 mr-4">{user?.fullName}</span>
                <button
                  onClick={logout}
-                 className=\"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium\"
+                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
                >
                  Logout
                </button>
@@ -437,56 +452,56 @@ Frontend Development
    src/features/dashboard/Dashboard.tsx:
 
    ```typescript
-   import React from 'react';
-   import { useQuery } from '@tanstack/react-query';
-   import api from '@/services/api';
-   import { CoverageStats, Track } from '@/types';
-   import StatsCard from './components/StatsCard';
-   import RecentTracks from './components/RecentTracks';
-   import CoverageChart from './components/CoverageChart';
+   import React from "react";
+   import { useQuery } from "@tanstack/react-query";
+   import api from "@/services/api";
+   import { CoverageStats, Track } from "@/types";
+   import StatsCard from "./components/StatsCard";
+   import RecentTracks from "./components/RecentTracks";
+   import CoverageChart from "./components/CoverageChart";
 
    const Dashboard: React.FC = () => {
      const { data: stats } = useQuery<CoverageStats>(
-       ['coverage-stats'],
+       ["coverage-stats"],
        async () => {
-         const response = await api.get('/areas/coverage');
+         const response = await api.get("/areas/coverage");
          return response.data;
        }
      );
 
      const { data: recentTracks } = useQuery<Track[]>(
-       ['recent-tracks'],
+       ["recent-tracks"],
        async () => {
-         const response = await api.get('/tracks', {
-           params: { limit: 5 }
+         const response = await api.get("/tracks", {
+           params: { limit: 5 },
          });
          return response.data;
        }
      );
 
      return (
-       <div className=\"space-y-6\">
-         <h1 className=\"text-2xl font-bold\">Dashboard</h1>
+       <div className="space-y-6">
+         <h1 className="text-2xl font-bold">Dashboard</h1>
 
-         <div className=\"grid grid-cols-1 md:grid-cols-3 gap-6\">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
            <StatsCard
-             title=\"Total Area Covered\"
+             title="Total Area Covered"
              value={`${stats?.areaKm2.toFixed(2)} km²`}
-             description=\"Total area covered by your tracks\"
+             description="Total area covered by your tracks"
            />
            <StatsCard
-             title=\"Earth Coverage\"
+             title="Earth Coverage"
              value={`${stats?.percentage.toFixed(6)}%`}
-             description=\"Percentage of Earth's surface covered\"
+             description="Percentage of Earth's surface covered"
            />
            <StatsCard
-             title=\"Total Tracks\"
+             title="Total Tracks"
              value={recentTracks?.length || 0}
-             description=\"Number of uploaded tracks\"
+             description="Number of uploaded tracks"
            />
          </div>
 
-         <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
            <CoverageChart />
            <RecentTracks tracks={recentTracks || []} />
          </div>
@@ -501,7 +516,7 @@ Frontend Development
    src/features/dashboard/components/StatsCard.tsx:
 
    ```typescript
-   import React from 'react';
+   import React from "react";
 
    interface StatsCardProps {
      title: string;
@@ -509,12 +524,16 @@ Frontend Development
      description: string;
    }
 
-   const StatsCard: React.FC<StatsCardProps> = ({ title, value, description }) => {
+   const StatsCard: React.FC<StatsCardProps> = ({
+     title,
+     value,
+     description,
+   }) => {
      return (
-       <div className=\"bg-white rounded-lg shadow p-6\">
-         <h3 className=\"text-lg font-medium text-gray-900\">{title}</h3>
-         <p className=\"mt-2 text-3xl font-semibold text-blue-600\">{value}</p>
-         <p className=\"mt-2 text-sm text-gray-500\">{description}</p>
+       <div className="bg-white rounded-lg shadow p-6">
+         <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+         <p className="mt-2 text-3xl font-semibold text-blue-600">{value}</p>
+         <p className="mt-2 text-sm text-gray-500">{description}</p>
        </div>
      );
    };
@@ -525,10 +544,18 @@ Frontend Development
    src/features/dashboard/components/CoverageChart.tsx:
 
    ```typescript
-   import React from 'react';
-   import { useQuery } from '@tanstack/react-query';
-   import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-   import api from '@/services/api';
+   import React from "react";
+   import { useQuery } from "@tanstack/react-query";
+   import {
+     LineChart,
+     Line,
+     XAxis,
+     YAxis,
+     CartesianGrid,
+     Tooltip,
+     ResponsiveContainer,
+   } from "recharts";
+   import api from "@/services/api";
 
    interface CoverageData {
      date: string;
@@ -537,27 +564,29 @@ Frontend Development
 
    const CoverageChart: React.FC = () => {
      const { data } = useQuery<CoverageData[]>(
-       ['coverage-history'],
+       ["coverage-history"],
        async () => {
-         const response = await api.get('/areas/coverage/history');
+         const response = await api.get("/areas/coverage/history");
          return response.data;
        }
      );
 
      return (
-       <div className=\"bg-white rounded-lg shadow p-6\">
-         <h3 className=\"text-lg font-medium text-gray-900 mb-4\">Coverage Growth</h3>
-         <div className=\"h-80\">
-           <ResponsiveContainer width=\"100%\" height=\"100%\">
+       <div className="bg-white rounded-lg shadow p-6">
+         <h3 className="text-lg font-medium text-gray-900 mb-4">
+           Coverage Growth
+         </h3>
+         <div className="h-80">
+           <ResponsiveContainer width="100%" height="100%">
              <LineChart data={data || []}>
-               <CartesianGrid strokeDasharray=\"3 3\" />
-               <XAxis dataKey=\"date\" />
+               <CartesianGrid strokeDasharray="3 3" />
+               <XAxis dataKey="date" />
                <YAxis />
                <Tooltip />
                <Line
-                 type=\"monotone\"
-                 dataKey=\"area\"
-                 stroke=\"#2563eb\"
+                 type="monotone"
+                 dataKey="area"
+                 stroke="#2563eb"
                  strokeWidth={2}
                />
              </LineChart>
@@ -573,10 +602,10 @@ Frontend Development
    src/features/dashboard/components/RecentTracks.tsx:
 
    ```typescript
-   import React from 'react';
-   import { Link } from 'react-router-dom';
-   import { Track } from '@/types';
-   import { formatDate, formatDistance } from '@/utils/formatting';
+   import React from "react";
+   import { Link } from "react-router-dom";
+   import { Track } from "@/types";
+   import { formatDate, formatDistance } from "@/utils/formatting";
 
    interface RecentTracksProps {
      tracks: Track[];
@@ -584,27 +613,27 @@ Frontend Development
 
    const RecentTracks: React.FC<RecentTracksProps> = ({ tracks }) => {
      return (
-       <div className=\"bg-white rounded-lg shadow\">
-         <div className=\"p-6\">
-           <h3 className=\"text-lg font-medium text-gray-900\">Recent Tracks</h3>
+       <div className="bg-white rounded-lg shadow">
+         <div className="p-6">
+           <h3 className="text-lg font-medium text-gray-900">Recent Tracks</h3>
          </div>
-         <div className=\"border-t border-gray-200\">
-           <ul className=\"divide-y divide-gray-200\">
+         <div className="border-t border-gray-200">
+           <ul className="divide-y divide-gray-200">
              {tracks.map((track) => (
-               <li key={track.id} className=\"p-6\">
-                 <div className=\"flex items-center justify-between\">
+               <li key={track.id} className="p-6">
+                 <div className="flex items-center justify-between">
                    <div>
-                     <h4 className=\"text-sm font-medium text-gray-900\">
+                     <h4 className="text-sm font-medium text-gray-900">
                        {track.filename}
                      </h4>
-                     <p className=\"mt-1 text-sm text-gray-500\">
-                       {formatDistance(track.totalDistance)} •{' '}
+                     <p className="mt-1 text-sm text-gray-500">
+                       {formatDistance(track.totalDistance)} •{" "}
                        {formatDate(track.createdAt)}
                      </p>
                    </div>
                    <Link
                      to={`/tracks/${track.id}`}
-                     className=\"text-blue-600 hover:text-blue-500 text-sm font-medium\"
+                     className="text-blue-600 hover:text-blue-500 text-sm font-medium"
                    >
                      View Details
                    </Link>
@@ -626,44 +655,44 @@ Frontend Development
    src/features/map/Map.tsx:
 
    ```typescript
-   import React, { useEffect } from 'react';
-   import { useQuery } from '@tanstack/react-query';
-   import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
-   import 'leaflet/dist/leaflet.css';
-   import api from '@/services/api';
-   import { CoverageDetails } from '@/types';
-   import MapControls from './components/MapControls';
-   import MapLegend from './components/MapLegend';
+   import React, { useEffect } from "react";
+   import { useQuery } from "@tanstack/react-query";
+   import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
+   import "leaflet/dist/leaflet.css";
+   import api from "@/services/api";
+   import { CoverageDetails } from "@/types";
+   import MapControls from "./components/MapControls";
+   import MapLegend from "./components/MapLegend";
 
    const Map: React.FC = () => {
      const { data: coverage } = useQuery<CoverageDetails>(
-       ['coverage-details'],
+       ["coverage-details"],
        async () => {
-         const response = await api.get('/areas/coverage/details');
+         const response = await api.get("/areas/coverage/details");
          return response.data;
        }
      );
 
      return (
-       <div className=\"h-[calc(100vh-4rem)]\">
+       <div className="h-[calc(100vh-4rem)]">
          <MapContainer
            center={[0, 0]}
            zoom={2}
-           className=\"h-full w-full\"
+           className="h-full w-full"
            zoomControl={false}
          >
            <TileLayer
-             url=\"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\"
-             attribution='&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'
+             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
            />
            {coverage && (
              <GeoJSON
                data={coverage.geojson}
                style={() => ({
-                 color: '#2563eb',
+                 color: "#2563eb",
                  weight: 2,
                  opacity: 0.6,
-                 fillColor: '#3b82f6',
+                 fillColor: "#3b82f6",
                  fillOpacity: 0.3,
                })}
              />
@@ -681,8 +710,8 @@ Frontend Development
    src/features/map/components/MapControls.tsx:
 
    ```typescript
-   import React from 'react';
-   import { useMap } from 'react-leaflet';
+   import React from "react";
+   import { useMap } from "react-leaflet";
 
    const MapControls: React.FC = () => {
      const map = useMap();
@@ -692,32 +721,62 @@ Frontend Development
      const handleCenter = () => map.setView([0, 0], 2);
 
      return (
-       <div className=\"absolute top-4 right-4 bg-white rounded-lg shadow-lg p-2 z-[1000]\">
+       <div className="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-2 z-[1000]">
          <button
            onClick={handleZoomIn}
-           className=\"p-2 hover:bg-gray-100 rounded-lg\"
-           title=\"Zoom In\"
+           className="p-2 hover:bg-gray-100 rounded-lg"
+           title="Zoom In"
          >
-           <svg className=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
-             <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M12 6v6m0 0v6m0-6h6m-6 0H6\" />
+           <svg
+             className="w-6 h-6"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24"
+           >
+             <path
+               strokeLinecap="round"
+               strokeLinejoin="round"
+               strokeWidth={2}
+               d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+             />
            </svg>
          </button>
          <button
            onClick={handleZoomOut}
-           className=\"p-2 hover:bg-gray-100 rounded-lg\"
-           title=\"Zoom Out\"
+           className="p-2 hover:bg-gray-100 rounded-lg"
+           title="Zoom Out"
          >
-           <svg className=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
-             <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M20 12H4\" />
+           <svg
+             className="w-6 h-6"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24"
+           >
+             <path
+               strokeLinecap="round"
+               strokeLinejoin="round"
+               strokeWidth={2}
+               d="M20 12H4"
+             />
            </svg>
          </button>
          <button
            onClick={handleCenter}
-           className=\"p-2 hover:bg-gray-100 rounded-lg\"
-           title=\"Center Map\"
+           className="p-2 hover:bg-gray-100 rounded-lg"
+           title="Center Map"
          >
-           <svg className=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">
-             <path strokeLinecap=\"round\" strokeLinejoin=\"round\" strokeWidth={2} d=\"M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z\" />
+           <svg
+             className="w-6 h-6"
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24"
+           >
+             <path
+               strokeLinecap="round"
+               strokeLinejoin="round"
+               strokeWidth={2}
+               d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+             />
            </svg>
          </button>
        </div>
@@ -731,12 +790,12 @@ Frontend Development
    src/features/upload/Upload.tsx:
 
    ```typescript
-   import React, { useCallback, useState } from 'react';
-   import { useNavigate } from 'react-router-dom';
-   import { useDropzone } from 'react-dropzone';
-   import { useMutation } from '@tanstack/react-query';
-   import api from '@/services/api';
-   import UploadProgress from './components/UploadProgress';
+   import React, { useCallback, useState } from "react";
+   import { useNavigate } from "react-router-dom";
+   import { useDropzone } from "react-dropzone";
+   import { useMutation } from "@tanstack/react-query";
+   import api from "@/services/api";
+   import UploadProgress from "./components/UploadProgress";
 
    const Upload: React.FC = () => {
      const navigate = useNavigate();
@@ -745,13 +804,14 @@ Frontend Development
      const uploadMutation = useMutation(
        async (file: File) => {
          const formData = new FormData();
-         formData.append('file', file);
+         formData.append("file", file);
 
-         const response = await api.post('/tracks/upload', formData, {
-           headers: { 'Content-Type': 'multipart/form-data' },
+         const response = await api.post("/tracks/upload", formData, {
+           headers: { "Content-Type": "multipart/form-data" },
            onUploadProgress: (progressEvent) => {
              if (progressEvent.total) {
-               const progress = (progressEvent.loaded / progressEvent.total) * 100;
+               const progress =
+                 (progressEvent.loaded / progressEvent.total) * 100;
                setUploadProgress(progress);
              }
            },
@@ -761,7 +821,7 @@ Frontend Development
        },
        {
          onSuccess: () => {
-           navigate('/tracks');
+           navigate("/tracks");
          },
        }
      );
@@ -778,40 +838,40 @@ Frontend Development
 
      const { getRootProps, getInputProps, isDragActive } = useDropzone({
        onDrop,
-       accept: { 'application/gpx+xml': ['.gpx'] },
+       accept: { "application/gpx+xml": [".gpx"] },
        maxFiles: 1,
      });
 
      return (
-       <div className=\"max-w-2xl mx-auto py-8\">
-         <h1 className=\"text-2xl font-bold mb-6\">Upload GPX Track</h1>
+       <div className="max-w-2xl mx-auto py-8">
+         <h1 className="text-2xl font-bold mb-6">Upload GPX Track</h1>
 
          <div
            {...getRootProps()}
            className={`border-2 border-dashed rounded-lg p-12 text-center ${
-             isDragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+             isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
            }`}
          >
            <input {...getInputProps()} />
            <svg
-             className=\"mx-auto h-12 w-12 text-gray-400\"
-             fill=\"none\"
-             viewBox=\"0 0 24 24\"
-             stroke=\"currentColor\"
+             className="mx-auto h-12 w-12 text-gray-400"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke="currentColor"
            >
-           <path
-               strokeLinecap=\"round\"
-               strokeLinejoin=\"round\"
+             <path
+               strokeLinecap="round"
+               strokeLinejoin="round"
                strokeWidth={2}
-               d=\"M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12\"
+               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
              />
            </svg>
-           <p className=\"mt-4 text-lg text-gray-600\">
+           <p className="mt-4 text-lg text-gray-600">
              {isDragActive
-               ? 'Drop your GPX file here...'
-               : 'Drag & drop your GPX file here, or click to select'}
+               ? "Drop your GPX file here..."
+               : "Drag & drop your GPX file here, or click to select"}
            </p>
-           <p className=\"mt-2 text-sm text-gray-500\">
+           <p className="mt-2 text-sm text-gray-500">
              GPX files only (max size: 10MB)
            </p>
          </div>
@@ -821,8 +881,8 @@ Frontend Development
          )}
 
          {uploadMutation.isError && (
-           <div className=\"mt-4 p-4 bg-red-50 rounded-md\">
-             <p className=\"text-red-700\">
+           <div className="mt-4 p-4 bg-red-50 rounded-md">
+             <p className="text-red-700">
                Error uploading file: {uploadMutation.error?.message}
              </p>
            </div>
@@ -837,7 +897,7 @@ Frontend Development
    src/features/upload/components/UploadProgress.tsx:
 
    ```typescript
-   import React from 'react';
+   import React from "react";
 
    interface UploadProgressProps {
      progress: number;
@@ -845,24 +905,24 @@ Frontend Development
 
    const UploadProgress: React.FC<UploadProgressProps> = ({ progress }) => {
      return (
-       <div className=\"mt-6\">
-         <div className=\"relative pt-1\">
-           <div className=\"flex mb-2 items-center justify-between\">
+       <div className="mt-6">
+         <div className="relative pt-1">
+           <div className="flex mb-2 items-center justify-between">
              <div>
-               <span className=\"text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200\">
+               <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
                  Uploading
                </span>
              </div>
-             <div className=\"text-right\">
-               <span className=\"text-xs font-semibold inline-block text-blue-600\">
+             <div className="text-right">
+               <span className="text-xs font-semibold inline-block text-blue-600">
                  {Math.round(progress)}%
                </span>
              </div>
            </div>
-           <div className=\"overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-200\">
+           <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-blue-200">
              <div
                style={{ width: `${progress}%` }}
-               className=\"shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-300\"
+               className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-300"
              />
            </div>
          </div>
@@ -877,30 +937,30 @@ Frontend Development
    src/features/tracks/Tracks.tsx:
 
    ```typescript
-   import React from 'react';
-   import { useQuery } from '@tanstack/react-query';
-   import { Link } from 'react-router-dom';
-   import api from '@/services/api';
-   import { Track } from '@/types';
-   import TrackCard from './components/TrackCard';
-   import TrackFilters from './components/TrackFilters';
+   import React from "react";
+   import { useQuery } from "@tanstack/react-query";
+   import { Link } from "react-router-dom";
+   import api from "@/services/api";
+   import { Track } from "@/types";
+   import TrackCard from "./components/TrackCard";
+   import TrackFilters from "./components/TrackFilters";
 
    const Tracks: React.FC = () => {
      const { data: tracks, isLoading } = useQuery<Track[]>(
-       ['tracks'],
+       ["tracks"],
        async () => {
-         const response = await api.get('/tracks');
+         const response = await api.get("/tracks");
          return response.data;
        }
      );
 
      return (
        <div>
-         <div className=\"flex justify-between items-center mb-6\">
-           <h1 className=\"text-2xl font-bold\">My Tracks</h1>
+         <div className="flex justify-between items-center mb-6">
+           <h1 className="text-2xl font-bold">My Tracks</h1>
            <Link
-             to=\"/upload\"
-             className=\"bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md\"
+             to="/upload"
+             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
            >
              Upload Track
            </Link>
@@ -909,11 +969,11 @@ Frontend Development
          <TrackFilters />
 
          {isLoading ? (
-           <div className=\"text-center py-12\">
-             <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto\" />
+           <div className="text-center py-12">
+             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto" />
            </div>
          ) : (
-           <div className=\"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6\">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
              {tracks?.map((track) => (
                <TrackCard key={track.id} track={track} />
              ))}
@@ -929,10 +989,10 @@ Frontend Development
    src/features/tracks/components/TrackCard.tsx:
 
    ```typescript
-   import React from 'react';
-   import { Link } from 'react-router-dom';
-   import { Track } from '@/types';
-   import { formatDate, formatDistance } from '@/utils/formatting';
+   import React from "react";
+   import { Link } from "react-router-dom";
+   import { Track } from "@/types";
+   import { formatDate, formatDistance } from "@/utils/formatting";
 
    interface TrackCardProps {
      track: Track;
@@ -941,22 +1001,22 @@ Frontend Development
    const TrackCard: React.FC<TrackCardProps> = ({ track }) => {
      const getStatusColor = (status: string) => {
        switch (status) {
-         case 'completed':
-           return 'bg-green-100 text-green-800';
-         case 'processing':
-           return 'bg-yellow-100 text-yellow-800';
-         case 'error':
-           return 'bg-red-100 text-red-800';
+         case "completed":
+           return "bg-green-100 text-green-800";
+         case "processing":
+           return "bg-yellow-100 text-yellow-800";
+         case "error":
+           return "bg-red-100 text-red-800";
          default:
-           return 'bg-gray-100 text-gray-800';
+           return "bg-gray-100 text-gray-800";
        }
      };
 
      return (
-       <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">
-         <div className=\"p-6\">
-           <div className=\"flex items-center justify-between mb-4\">
-             <h3 className=\"text-lg font-medium text-gray-900 truncate\">
+       <div className="bg-white rounded-lg shadow-md overflow-hidden">
+         <div className="p-6">
+           <div className="flex items-center justify-between mb-4">
+             <h3 className="text-lg font-medium text-gray-900 truncate">
                {track.filename}
              </h3>
              <span
@@ -968,22 +1028,22 @@ Frontend Development
              </span>
            </div>
 
-           <div className=\"space-y-2\">
-             <p className=\"text-sm text-gray-500\">
+           <div className="space-y-2">
+             <p className="text-sm text-gray-500">
                Distance: {formatDistance(track.totalDistance)}
              </p>
-             <p className=\"text-sm text-gray-500\">
+             <p className="text-sm text-gray-500">
                Elevation Gain: {track.totalElevationGain}m
              </p>
-             <p className=\"text-sm text-gray-500\">
+             <p className="text-sm text-gray-500">
                Uploaded: {formatDate(track.createdAt)}
              </p>
            </div>
 
-           <div className=\"mt-4\">
+           <div className="mt-4">
              <Link
                to={`/tracks/${track.id}`}
-               className=\"text-blue-600 hover:text-blue-500 text-sm font-medium\"
+               className="text-blue-600 hover:text-blue-500 text-sm font-medium"
              >
                View Details →
              </Link>
@@ -1002,20 +1062,20 @@ Frontend Development
    src/features/tracks/TrackDetails.tsx:
 
    ```typescript
-   import React from 'react';
-   import { useParams } from 'react-router-dom';
-   import { useQuery } from '@tanstack/react-query';
-   import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
-   import api from '@/services/api';
-   import { Track } from '@/types';
-   import TrackStats from './components/TrackStats';
-   import TrackElevationChart from './components/TrackElevationChart';
+   import React from "react";
+   import { useParams } from "react-router-dom";
+   import { useQuery } from "@tanstack/react-query";
+   import { MapContainer, TileLayer, Polyline } from "react-leaflet";
+   import api from "@/services/api";
+   import { Track } from "@/types";
+   import TrackStats from "./components/TrackStats";
+   import TrackElevationChart from "./components/TrackElevationChart";
 
    const TrackDetails: React.FC = () => {
      const { id } = useParams<{ id: string }>();
 
      const { data: track, isLoading } = useQuery<Track>(
-       ['track', id],
+       ["track", id],
        async () => {
          const response = await api.get(`/tracks/${id}`);
          return response.data;
@@ -1023,7 +1083,7 @@ Frontend Development
      );
 
      const { data: trackPoints } = useQuery(
-       ['track-points', id],
+       ["track-points", id],
        async () => {
          const response = await api.get(`/tracks/${id}/points`);
          return response.data;
@@ -1035,16 +1095,16 @@ Frontend Development
 
      if (isLoading) {
        return (
-         <div className=\"flex justify-center items-center h-64\">
-           <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600\" />
+         <div className="flex justify-center items-center h-64">
+           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
          </div>
        );
      }
 
      if (!track) {
        return (
-         <div className=\"text-center py-12\">
-           <h2 className=\"text-2xl font-bold text-gray-900\">Track not found</h2>
+         <div className="text-center py-12">
+           <h2 className="text-2xl font-bold text-gray-900">Track not found</h2>
          </div>
        );
      }
@@ -1055,38 +1115,34 @@ Frontend Development
      ]);
 
      return (
-       <div className=\"space-y-6\">
-         <div className=\"flex justify-between items-center\">
-           <h1 className=\"text-2xl font-bold\">{track.filename}</h1>
+       <div className="space-y-6">
+         <div className="flex justify-between items-center">
+           <h1 className="text-2xl font-bold">{track.filename}</h1>
            <span
              className={`px-3 py-1 text-sm font-medium rounded-full ${
-               track.status === 'completed'
-                 ? 'bg-green-100 text-green-800'
-                 : 'bg-yellow-100 text-yellow-800'
+               track.status === "completed"
+                 ? "bg-green-100 text-green-800"
+                 : "bg-yellow-100 text-yellow-800"
              }`}
            >
              {track.status}
            </span>
          </div>
 
-         <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">
-           <div className=\"bg-white rounded-lg shadow-md overflow-hidden\">
-             <div className=\"h-96\">
+         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+           <div className="bg-white rounded-lg shadow-md overflow-hidden">
+             <div className="h-96">
                <MapContainer
                  bounds={positions}
-                 className=\"h-full w-full\"
+                 className="h-full w-full"
                  zoomControl={false}
                >
                  <TileLayer
-                   url=\"https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\"
-                   attribution='&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'
+                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                  />
                  {positions && (
-                   <Polyline
-                     positions={positions}
-                     color=\"#2563eb\"
-                     weight={3}
-                   />
+                   <Polyline positions={positions} color="#2563eb" weight={3} />
                  )}
                </MapContainer>
              </div>
@@ -1107,9 +1163,13 @@ Frontend Development
    src/features/tracks/components/TrackStats.tsx:
 
    ```typescript
-   import React from 'react';
-   import { Track } from '@/types';
-   import { formatDate, formatDistance, formatDuration } from '@/utils/formatting';
+   import React from "react";
+   import { Track } from "@/types";
+   import {
+     formatDate,
+     formatDistance,
+     formatDuration,
+   } from "@/utils/formatting";
 
    interface TrackStatsProps {
      track: Track;
@@ -1117,30 +1177,28 @@ Frontend Development
 
    const TrackStats: React.FC<TrackStatsProps> = ({ track }) => {
      return (
-       <div className=\"bg-white rounded-lg shadow-md p-6\">
-         <h2 className=\"text-lg font-medium mb-4\">Track Statistics</h2>
-         <div className=\"grid grid-cols-2 gap-4\">
+       <div className="bg-white rounded-lg shadow-md p-6">
+         <h2 className="text-lg font-medium mb-4">Track Statistics</h2>
+         <div className="grid grid-cols-2 gap-4">
            <div>
-             <p className=\"text-sm text-gray-500\">Distance</p>
-             <p className=\"text-lg font-medium\">
+             <p className="text-sm text-gray-500">Distance</p>
+             <p className="text-lg font-medium">
                {formatDistance(track.totalDistance)}
              </p>
            </div>
            <div>
-             <p className=\"text-sm text-gray-500\">Elevation Gain</p>
-             <p className=\"text-lg font-medium\">
-               {track.totalElevationGain}m
-             </p>
+             <p className="text-sm text-gray-500">Elevation Gain</p>
+             <p className="text-lg font-medium">{track.totalElevationGain}m</p>
            </div>
            <div>
-             <p className=\"text-sm text-gray-500\">Duration</p>
-             <p className=\"text-lg font-medium\">
+             <p className="text-sm text-gray-500">Duration</p>
+             <p className="text-lg font-medium">
                {formatDuration(track.startTime, track.endTime)}
              </p>
            </div>
            <div>
-             <p className=\"text-sm text-gray-500\">Date</p>
-             <p className=\"text-lg font-medium\">
+             <p className="text-sm text-gray-500">Date</p>
+             <p className="text-lg font-medium">
                {formatDate(track.startTime)}
              </p>
            </div>
@@ -1195,72 +1253,78 @@ Frontend Development
    src/features/tracks/components/TrackElevationChart.tsx:
 
 ```typescript
- import React from 'react';
- import {
-   AreaChart,
-   Area,
-   XAxis,
-   YAxis,
-   CartesianGrid,
-   Tooltip,
-   ResponsiveContainer
- } from 'recharts';
- import { formatDistance, formatElevation } from '@/utils/formatting';
+import React from "react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { formatDistance, formatElevation } from "@/utils/formatting";
 
- interface TrackPoint {
-   distance: number;
-   elevation: number;
- }
+interface TrackPoint {
+  distance: number;
+  elevation: number;
+}
 
- interface TrackElevationChartProps {
-   points: TrackPoint[];
- }
+interface TrackElevationChartProps {
+  points: TrackPoint[];
+}
 
- const TrackElevationChart: React.FC<TrackElevationChartProps> = ({ points }) => {
-   const data = points.map((point, index) => ({
-     distance: point.distance,
-     elevation: point.elevation,
-   }));
+const TrackElevationChart: React.FC<TrackElevationChartProps> = ({
+  points,
+}) => {
+  const data = points.map((point, index) => ({
+    distance: point.distance,
+    elevation: point.elevation,
+  }));
 
-   return (
-     <div className=\"bg-white rounded-lg shadow-md p-6\">
-       <h2 className=\"text-lg font-medium mb-4\">Elevation Profile</h2>
-       <div className=\"h-64\">
-         <ResponsiveContainer width=\"100%\" height=\"100%\">
-           <AreaChart data={data}>
-             <CartesianGrid strokeDasharray=\"3 3\" />
-             <XAxis
-               dataKey=\"distance\"
-               tickFormatter={(value) => formatDistance(value)}
-               label={{ value: 'Distance', position: 'insideBottom', offset: -10 }}
-             />
-             <YAxis
-               tickFormatter={(value) => formatElevation(value)}
-               label={{ value: 'Elevation', angle: -90, position: 'insideLeft' }}
-             />
-             <Tooltip
-               formatter={(value: number, name: string) =>
-                 name === 'elevation'
-                   ? formatElevation(value)
-                   : formatDistance(value)
-               }
-               labelFormatter={(value) => `Distance: ${formatDistance(value)}`}
-             />
-             <Area
-               type=\"monotone\"
-               dataKey=\"elevation\"
-               stroke=\"#2563eb\"
-               fill=\"#93c5fd\"
-               strokeWidth={2}
-             />
-           </AreaChart>
-         </ResponsiveContainer>
-       </div>
-     </div>
-   );
- };
+  return (
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <h2 className="text-lg font-medium mb-4">Elevation Profile</h2>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="distance"
+              tickFormatter={(value) => formatDistance(value)}
+              label={{
+                value: "Distance",
+                position: "insideBottom",
+                offset: -10,
+              }}
+            />
+            <YAxis
+              tickFormatter={(value) => formatElevation(value)}
+              label={{ value: "Elevation", angle: -90, position: "insideLeft" }}
+            />
+            <Tooltip
+              formatter={(value: number, name: string) =>
+                name === "elevation"
+                  ? formatElevation(value)
+                  : formatDistance(value)
+              }
+              labelFormatter={(value) => `Distance: ${formatDistance(value)}`}
+            />
+            <Area
+              type="monotone"
+              dataKey="elevation"
+              stroke="#2563eb"
+              fill="#93c5fd"
+              strokeWidth={2}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+};
 
- export default TrackElevationChart;
+export default TrackElevationChart;
 ```
 
 2. Global State Management:
@@ -1300,71 +1364,79 @@ Frontend Development
    src/features/settings/Settings.tsx:
 
    ```typescript
-   import React from 'react';
-   import { useSettingsStore } from '@/stores/settingsStore';
+   import React from "react";
+   import { useSettingsStore } from "@/stores/settingsStore";
 
    const Settings: React.FC = () => {
-     const { theme, mapStyle, unitSystem, setTheme, setMapStyle, setUnitSystem } =
-       useSettingsStore();
+     const {
+       theme,
+       mapStyle,
+       unitSystem,
+       setTheme,
+       setMapStyle,
+       setUnitSystem,
+     } = useSettingsStore();
 
      return (
-       <div className=\"max-w-2xl mx-auto py-8\">
-         <h1 className=\"text-2xl font-bold mb-6\">Settings</h1>
+       <div className="max-w-2xl mx-auto py-8">
+         <h1 className="text-2xl font-bold mb-6">Settings</h1>
 
-         <div className=\"bg-white rounded-lg shadow-md p-6 space-y-6\">
+         <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
            <div>
-             <h2 className=\"text-lg font-medium mb-4\">Appearance</h2>
-             <div className=\"space-y-4\">
+             <h2 className="text-lg font-medium mb-4">Appearance</h2>
+             <div className="space-y-4">
                <div>
-                 <label className=\"block text-sm font-medium text-gray-700 mb-2\">
+                 <label className="block text-sm font-medium text-gray-700 mb-2">
                    Theme
                  </label>
                  <select
                    value={theme}
-                   onChange={(e) => setTheme(e.target.value as 'light' | 'dark')}
-                   className=\"mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md\"
+                   onChange={(e) =>
+                     setTheme(e.target.value as "light" | "dark")
+                   }
+                   className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                  >
-                   <option value=\"light\">Light</option>
-                   <option value=\"dark\">Dark</option>
+                   <option value="light">Light</option>
+                   <option value="dark">Dark</option>
                  </select>
                </div>
 
                <div>
-                 <label className=\"block text-sm font-medium text-gray-700 mb-2\">
+                 <label className="block text-sm font-medium text-gray-700 mb-2">
                    Map Style
                  </label>
                  <select
                    value={mapStyle}
                    onChange={(e) =>
                      setMapStyle(
-                       e.target.value as 'standard' | 'satellite' | 'terrain'
+                       e.target.value as "standard" | "satellite" | "terrain"
                      )
                    }
-                   className=\"mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md\"
+                   className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                  >
-                   <option value=\"standard\">Standard</option>
-                   <option value=\"satellite\">Satellite</option>
-                   <option value=\"terrain\">Terrain</option>
+                   <option value="standard">Standard</option>
+                   <option value="satellite">Satellite</option>
+                   <option value="terrain">Terrain</option>
                  </select>
                </div>
              </div>
            </div>
 
            <div>
-             <h2 className=\"text-lg font-medium mb-4\">Preferences</h2>
+             <h2 className="text-lg font-medium mb-4">Preferences</h2>
              <div>
-               <label className=\"block text-sm font-medium text-gray-700 mb-2\">
+               <label className="block text-sm font-medium text-gray-700 mb-2">
                  Unit System
                </label>
                <select
                  value={unitSystem}
                  onChange={(e) =>
-                   setUnitSystem(e.target.value as 'metric' | 'imperial')
+                   setUnitSystem(e.target.value as "metric" | "imperial")
                  }
-                 className=\"mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md\"
+                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                >
-                 <option value=\"metric\">Metric (km, m)</option>
-                 <option value=\"imperial\">Imperial (mi, ft)</option>
+                 <option value="metric">Metric (km, m)</option>
+                 <option value="imperial">Imperial (mi, ft)</option>
                </select>
              </div>
            </div>
@@ -1570,7 +1642,7 @@ Frontend Development
    src/components/ErrorBoundary.tsx:
 
    ```typescript
-   import React, { Component, ErrorInfo } from 'react';
+   import React, { Component, ErrorInfo } from "react";
 
    interface Props {
      children: React.ReactNode;
@@ -1592,23 +1664,23 @@ Frontend Development
      }
 
      public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-       console.error('Uncaught error:', error, errorInfo);
+       console.error("Uncaught error:", error, errorInfo);
      }
 
      public render() {
        if (this.state.hasError) {
          return (
-           <div className=\"min-h-screen flex items-center justify-center bg-gray-100\">
-             <div className=\"max-w-md w-full p-6 bg-white rounded-lg shadow-md\">
-               <h2 className=\"text-2xl font-bold text-red-600 mb-4\">
+           <div className="min-h-screen flex items-center justify-center bg-gray-100">
+             <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md">
+               <h2 className="text-2xl font-bold text-red-600 mb-4">
                  Oops! Something went wrong
                </h2>
-               <p className=\"text-gray-600 mb-4\">
-                 {this.state.error?.message || 'An unexpected error occurred'}
+               <p className="text-gray-600 mb-4">
+                 {this.state.error?.message || "An unexpected error occurred"}
                </p>
                <button
                  onClick={() => window.location.reload()}
-                 className=\"w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors\"
+                 className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
                >
                  Refresh Page
                </button>
@@ -1628,21 +1700,21 @@ Frontend Development
    src/components/LoadingStates.tsx:
 
    ```typescript
-   import React from 'react';
+   import React from "react";
 
    interface LoadingSpinnerProps {
-     size?: 'small' | 'medium' | 'large';
+     size?: "small" | "medium" | "large";
      className?: string;
    }
 
    export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-     size = 'medium',
-     className = '',
+     size = "medium",
+     className = "",
    }) => {
      const sizeClasses = {
-       small: 'h-4 w-4',
-       medium: 'h-8 w-8',
-       large: 'h-12 w-12',
+       small: "h-4 w-4",
+       medium: "h-8 w-8",
+       large: "h-12 w-12",
      };
 
      return (
@@ -1661,14 +1733,14 @@ Frontend Development
 
    export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
      lines = 3,
-     className = '',
+     className = "",
    }) => {
      return (
        <div className={`space-y-4 ${className}`}>
          {Array.from({ length: lines }).map((_, index) => (
            <div
              key={index}
-             className=\"h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-700\"
+             className="h-4 bg-gray-200 rounded animate-pulse dark:bg-gray-700"
              style={{ width: `${Math.random() * 50 + 50}%` }}
            />
          ))}
@@ -1817,13 +1889,13 @@ Frontend Development
    src/service-worker.ts:
 
    ```typescript
-   /// <reference lib=\"webworker\" />
+   /// <reference lib="webworker" />
 
-   import { clientsClaim } from 'workbox-core';
-   import { precacheAndRoute } from 'workbox-precaching';
-   import { registerRoute } from 'workbox-routing';
-   import { CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
-   import { ExpirationPlugin } from 'workbox-expiration';
+   import { clientsClaim } from "workbox-core";
+   import { precacheAndRoute } from "workbox-precaching";
+   import { registerRoute } from "workbox-routing";
+   import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
+   import { ExpirationPlugin } from "workbox-expiration";
 
    declare const self: ServiceWorkerGlobalScope;
 
@@ -1834,9 +1906,9 @@ Frontend Development
 
    // Cache map tiles
    registerRoute(
-     ({ url }) => url.href.includes('tile.openstreetmap.org'),
+     ({ url }) => url.href.includes("tile.openstreetmap.org"),
      new CacheFirst({
-       cacheName: 'map-tiles',
+       cacheName: "map-tiles",
        plugins: [
          new ExpirationPlugin({
            maxEntries: 500,
@@ -1848,9 +1920,9 @@ Frontend Development
 
    // Cache API responses
    registerRoute(
-     ({ url }) => url.pathname.startsWith('/api'),
+     ({ url }) => url.pathname.startsWith("/api"),
      new StaleWhileRevalidate({
-       cacheName: 'api-cache',
+       cacheName: "api-cache",
        plugins: [
          new ExpirationPlugin({
            maxEntries: 100,
@@ -1861,18 +1933,18 @@ Frontend Development
    );
 
    // Handle offline fallback
-   const FALLBACK_HTML = '/offline.html';
+   const FALLBACK_HTML = "/offline.html";
 
-   self.addEventListener('install', (event) => {
+   self.addEventListener("install", (event) => {
      event.waitUntil(
-       caches.open('offline-fallback').then((cache) => {
+       caches.open("offline-fallback").then((cache) => {
          return cache.add(FALLBACK_HTML);
        })
      );
    });
 
-   self.addEventListener('fetch', (event) => {
-     if (event.request.mode === 'navigate') {
+   self.addEventListener("fetch", (event) => {
+     if (event.request.mode === "navigate") {
        event.respondWith(
          fetch(event.request).catch(() => {
            return caches.match(FALLBACK_HTML);
@@ -1968,17 +2040,17 @@ Frontend Development
    src/main.tsx:
 
    ```typescript
-   import React from 'react';
-   import ReactDOM from 'react-dom/client';
-   import { QueryClientProvider } from '@tanstack/react-query';
-   import { ToastContainer } from 'react-toastify';
-   import App from './App';
-   import { queryClient } from './utils/queryClient';
-   import { setupGlobalErrorHandling } from './utils/errorHandler';
-   import { trackPageLoad } from './utils/performance-monitoring';
-   import { setupAppUpdateHandler } from './utils/app-update';
-   import 'react-toastify/dist/ReactToastify.css';
-   import './index.css';
+   import React from "react";
+   import ReactDOM from "react-dom/client";
+   import { QueryClientProvider } from "@tanstack/react-query";
+   import { ToastContainer } from "react-toastify";
+   import App from "./App";
+   import { queryClient } from "./utils/queryClient";
+   import { setupGlobalErrorHandling } from "./utils/errorHandler";
+   import { trackPageLoad } from "./utils/performance-monitoring";
+   import { setupAppUpdateHandler } from "./utils/app-update";
+   import "react-toastify/dist/ReactToastify.css";
+   import "./index.css";
 
    // Setup error handling and performance monitoring
    setupGlobalErrorHandling();
@@ -1986,24 +2058,24 @@ Frontend Development
    setupAppUpdateHandler();
 
    // Register service worker
-   if ('serviceWorker' in navigator) {
-     window.addEventListener('load', () => {
+   if ("serviceWorker" in navigator) {
+     window.addEventListener("load", () => {
        navigator.serviceWorker
-         .register('/service-worker.js')
+         .register("/service-worker.js")
          .then((registration) => {
-           console.log('SW registered:', registration);
+           console.log("SW registered:", registration);
          })
          .catch((error) => {
-           console.log('SW registration failed:', error);
+           console.log("SW registration failed:", error);
          });
      });
    }
 
-   ReactDOM.createRoot(document.getElementById('root')!).render(
+   ReactDOM.createRoot(document.getElementById("root")!).render(
      <React.StrictMode>
        <QueryClientProvider client={queryClient}>
          <App />
-         <ToastContainer position=\"bottom-right\" />
+         <ToastContainer position="bottom-right" />
        </QueryClientProvider>
      </React.StrictMode>
    );
