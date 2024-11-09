@@ -126,7 +126,7 @@ mkdir gpx-tracker
 cd gpx-tracker
 
 # Initialize Poetry project
-poetry init --name gpx-tracker --description "GPX Track Analysis Application" --author "Your Name <your.email@example.com>" --python "^3.9"
+poetry init --name gpx-tracker --description "GPX Track Analysis Application" --author "Your Name <your.email@example.com>" --python "^3.11"
 
 # Add essential dependencies
 poetry add fastapi uvicorn sqlalchemy psycopg2-binary geoalchemy2 gpxpy celery redis
@@ -150,50 +150,208 @@ A. Install Node.js:
   sudo apt-get install -y nodejs
   ```
 
-B. Initialize Frontend Project:
+1. Create Main Project Directory:
 
-```bash
-# Create React project using Vite
-npm create vite@latest gpx-tracker-frontend -- --template react-ts
-cd gpx-tracker-frontend
+   ```bash
+   mkdir gpx-tracker
+   cd gpx-tracker
 
-# Install dependencies
-npm install
-npm install leaflet @types/leaflet axios react-query tailwindcss postcss autoprefixer
-npm install --save-dev jest @testing-library/react @testing-library/jest-dom
-```
+   # Create the basic structure
+   mkdir -p backend/app/{api,models,schemas,services,tests}
+   mkdir -p frontend/src/{components,pages,services,hooks,utils}
+   mkdir -p docker/{postgres,backend,frontend}
+   ```
+
+2. Initialize Frontend:
+
+   ```bash
+   # Move into frontend directory
+   cd frontend
+
+   # Initialize Vite project in the current directory
+   npm create vite@latest . -- --template react-ts
+
+   # Install dependencies
+   npm install
+   npm install leaflet @types/leaflet axios react-query tailwindcss postcss autoprefixer
+   npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+   ```
+
+3. Initialize Backend:
+
+   ```bash
+   # Move to backend directory
+   cd ../backend
+
+   # Initialize Poetry project
+   poetry init
+   ```
+
+This approach ensures:
+
+1. A clean monorepo structure
+2. Proper isolation between frontend and backend
+3. Correct Docker configuration paths
+4. Easier dependency management",
+
+5. Initialize Git Repository:
+
+   ```bash
+   # From the root directory (gpx-tracker)
+   git init
+
+   # Create root-level .gitignore
+   cat > .gitignore << EOL
+   # Dependencies
+   node_modules/
+   .pnp/
+   .pnp.js
+
+   # Python
+   __pycache__/
+   *.py[cod]
+   .env
+   .venv
+   venv/
+
+   # Production
+   build/
+   dist/
+
+   # Testing
+   coverage/
+   .pytest_cache/
+
+   # IDE
+   .idea/
+   .vscode/
+   *.swp
+   *.swo
+
+   # Misc
+   .DS_Store
+   .env.local
+   .env.development.local
+   .env.test.local
+   .env.production.local
+
+   # Docker
+   .docker/
+   pgdata/
+   EOL
+
+   ```
+
+6. Create Root-Level Configuration:
+   A. Create .env.example:
+
+   ```env
+   # PostgreSQL
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=yourpassword
+   POSTGRES_DB=gpx_tracker
+
+   # Backend
+   DATABASE_URL=postgresql://postgres:yourpassword@postgres:5432/gpx_tracker
+   REDIS_URL=redis://redis:6379/0
+
+   # Frontend
+   VITE_API_URL=http://localhost:8000
+   ```
+
+   B. Create README.md:
+
+   ````markdown
+   # GPX Tracker
+
+   A web application for tracking and visualizing GPX routes.
+
+   ## Project Structure
+
+   - `backend/`: FastAPI application
+   - `frontend/`: React application
+   - `docker/`: Docker configuration files
+
+   ## Development Setup
+
+   1. Clone the repository
+   2. Copy .env.example to .env and adjust values
+   3. Start the development environment:
+      ```bash
+      docker-compose up -d
+      ```
+   ````
+
+   ## Available Scripts
+
+   Backend:
+
+   ```bash
+   cd backend
+   poetry install  # Install dependencies
+   poetry run pytest  # Run tests
+   ```
+
+   Frontend:
+
+   ```bash
+   cd frontend
+   npm install  # Install dependencies
+   npm run dev  # Start development server
+   ```
+
+   ```
+
+   ```
+
+7. Initial Commit:
+   ```bash
+   git add .
+   git commit -m \"Initial project setup\"
+   ```
+
+This structure provides a solid foundation for the project with:
+
+1. Clear separation of concerns
+2. Proper version control setup
+3. Environment variable management
+4. Comprehensive documentation
+
+You now have a clean, well-organized project structure ready for development. The next steps would be implementing the specific components within each directory.
+
+---
 
 7. Project Structure Setup:
 
-   ```bash
-   gpx-tracker/
-   ├── backend/
-   │   ├── app/
-   │   │   ├── __init__.py
-   │   │   ├── main.py
-   │   │   ├── models/
-   │   │   ├── schemas/
-   │   │   ├── services/
-   │   │   └── api/
-   │   ├── tests/
-   │   ├── alembic/
-   │   ├── pyproject.toml
-   │   └── poetry.lock
-   ├── frontend/
-   │   ├── src/
-   │   │   ├── components/
-   │   │   ├── pages/
-   │   │   ├── services/
-   │   │   ├── hooks/
-   │   │   └── utils/
-   │   ├── package.json
-   │   └── tsconfig.json
-   ├── docker/
-   │   ├── postgres/
-   │   ├── backend/
-   │   └── frontend/
-   └── docker-compose.yml
-   ```
+```
+gpx-tracker/
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
+│   │   └── api/
+│   ├── tests/
+│   ├── alembic/
+│   ├── pyproject.toml
+│   └── poetry.lock
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── hooks/
+│   │   └── utils/
+│   ├── package.json
+│   └── tsconfig.json
+├── docker/
+│   ├── postgres/
+│   ├── backend/
+│   └── frontend/
+└── docker-compose.yml
+```
 
 8. Docker Compose Configuration:
 
