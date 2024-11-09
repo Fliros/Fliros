@@ -109,13 +109,13 @@ B. Install Poetry (Python dependency management):
 osx / linux / bashonwindows / Windows+MinGW install instructions
 
 ```bash
- curl -sSL https://install.python-poetry.org | python3 -
+  curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-    windows powershell install instructions
+Windows powershell install instructions
 
 ```bash
- (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+  (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
 ```
 
 C. Create Python virtual environment:
