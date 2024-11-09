@@ -1,24 +1,21 @@
 # Development Environment Setup
 
-## Table of Contents
-
-- [Development Environment Setup](#development-environment-setup)
-  - [Visual Studio Code Setup](#visual-studio-code-setup)
-    - [Installation](#installation)
-    - [Extensions](#extensions)
-    - [Configuration](#configuration)
-  - [Development Tools Installation](#development-tools-installation)
-    - [Git](#git)
-    - [Docker](#docker)
-    - [PostgreSQL](#postgresql)
-    - [Python](#python)
-    - [Poetry](#poetry)
-    - [Node.js](#nodejs)
-  - [Troubleshooting Guide](#troubleshooting-guide)
-    - [Docker Issues](#docker-issues)
-    - [PostgreSQL Issues](#postgresql-issues)
-    - [Python/Poetry Issues](#pythonpoetry-issues)
-    - [Node.js Issues](#nodejs-issues)
+- [Visual Studio Code Setup](#visual-studio-code-setup)
+  - [Installation](#installation)
+  - [Extensions](#extensions)
+  - [Configuration](#configuration)
+- [Development Tools Installation](#development-tools-installation)
+  - [Git](#git)
+  - [Docker](#docker)
+  - [PostgreSQL](#postgresql)
+  - [Python](#python)
+  - [Poetry](#poetry)
+  - [Node.js](#nodejs)
+- [Troubleshooting Guide](#troubleshooting-guide)
+  - [Docker Issues](#docker-issues)
+  - [PostgreSQL Issues](#postgresql-issues)
+  - [Python/Poetry Issues](#pythonpoetry-issues)
+  - [Node.js Issues](#nodejs-issues)
 
 ## Visual Studio Code Setup
 
