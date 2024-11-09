@@ -1,319 +1,353 @@
-# Project Initialization
+# Project Initialization Guide
 
-# Part 1: GitHub Repository Setup
+## Table of Contents
 
-1. Create GitHub Repository:
-   A. Using GitHub Desktop:
+- [Project Initialization Guide](#project-initialization-guide)
+  - [Part 1: GitHub Repository Setup](#part-1-github-repository-setup)
+    - [Create GitHub Repository](#create-github-repository)
+    - [Clone and Set Up Basic Structure](#clone-and-set-up-basic-structure)
+    - [Initial Configuration Files](#initial-configuration-files)
+  - [Part 2: Backend Setup](#part-2-backend-setup)
+    - [Initialize Backend Project](#initialize-backend-project)
+    - [Backend Configuration Files](#backend-configuration-files)
+  - [Part 3: Frontend Setup](#part-3-frontend-setup)
+    - [Initialize Frontend Project](#initialize-frontend-project)
+    - [Configure Frontend](#configure-frontend)
+  - [Part 4: Docker and Documentation Setup](#part-4-docker-and-documentation-setup)
+    - [Docker Configuration](#docker-configuration)
+    - [Project Documentation](#project-documentation)
+  - [Part 5: Development Scripts and Testing Setup](#part-5-development-scripts-and-testing-setup)
+    - [Development Scripts](#development-scripts)
+    - [Initial Tests Setup](#initial-tests-setup)
+    - [Git Hooks Setup](#git-hooks-setup)
+  - [IDE Configuration](#ide-configuration)
+    - [VS Code Workspace Settings](#vs-code-workspace-settings)
+  - [Final Verification and Next Steps](#final-verification-and-next-steps)
+    - [Verification Checklist](#verification-checklist)
+    - [Common Issues and Solutions](#common-issues-and-solutions)
+    - [Next Steps](#next-steps)
 
-   - Open GitHub Desktop
-   - Click File -> New Repository
-   - Fill in the following:
-     - Name: gpx-tracker
-     - Description: A web application for tracking and visualizing GPX routes
-     - Local Path: Choose your preferred location
-     - Initialize with README: Yes
-     - Git ignore: Choose Python
-     - License: MIT
-   - Click 'Create Repository'
+## Part 1: GitHub Repository Setup
 
-   B. Or using GitHub CLI:
+### Create GitHub Repository
 
-   ```bash
-   # Install GitHub CLI if not installed
-   # macOS: brew install gh
-   # Linux: sudo apt install gh
+A. Using GitHub Desktop:
 
-   # Login to GitHub
-   gh auth login
+- Open GitHub Desktop
+- Click File -> New Repository
+- Fill in the following:
+  - Name: gpx-tracker
+  - Description: A web application for tracking and visualizing GPX routes
+  - Local Path: Choose your preferred location
+  - Initialize with README: Yes
+  - Git ignore: Choose Python
+  - License: MIT
+- Click 'Create Repository'
 
-   # Create repository
-   gh repo create gpx-tracker \
-     --public \
-     --description "A web application for tracking and visualizing GPX routes" \
-     --license mit \
-     --gitignore Python \
-     --clone
-   ```
+B. Or using GitHub CLI:
 
-2. Clone and Set Up Basic Structure:
+```bash
+# Install GitHub CLI if not installed
+# macOS: brew install gh
+# Linux: sudo apt install gh
 
-   ```bash
-   # If you didn't clone during creation
-   git clone https://github.com/yourusername/gpx-tracker.git
-   cd gpx-tracker
+# Login to GitHub
+gh auth login
 
-   # Create basic folder structure
-   mkdir -p backend/app/{api,core,db,models,schemas,services,tests}
-   mkdir -p frontend/src/{components,pages,services,hooks,utils,assets,styles}
-   mkdir -p docker/{backend,frontend,postgres}
-   ```
+# Create repository
+gh repo create gpx-tracker \
+  --public \
+  --description "A web application for tracking and visualizing GPX routes" \
+  --license mit \
+  --gitignore Python \
+  --clone
+```
 
-3. Create Initial Configuration Files:
-   A. Root .gitignore:
+### Clone and Set Up Basic Structure
 
-   ```gitignore # Python   __pycache__/
-   *.py[cod]
-   *$py.class
-   *.so
-   .Python
-   env/
-   build/
-   develop-eggs/
-   dist/
-   downloads/
-   eggs/
-   .eggs/
-   lib/
-   lib64/
-   parts/
-   sdist/
-   var/
-   *.egg-info/
-   .installed.cfg
-   *.egg
+```bash
+# If you didn't clone during creation
+git clone https://github.com/yourusername/gpx-tracker.git
+cd gpx-tracker
 
-   # Node
-   node_modules/
-   npm-debug.log
-   yarn-debug.log
-   yarn-error.log
-   .env
-   .env.local
-   .env.development.local
-   .env.test.local
-   .env.production.local
+# Create basic folder structure
+mkdir -p backend/app/{api,core,db,models,schemas,services,tests}
+mkdir -p frontend/src/{components,pages,services,hooks,utils,assets,styles}
+mkdir -p docker/{backend,frontend,postgres}
+```
 
-   # IDEs
-   .idea/
-   .vscode/
-   *.swp
-   *.swo
+### Initial Configuration Files
 
-   # Docker
-   docker-compose.override.yml
+A. Root .gitignore:
 
-   # Project specific
-   .coverage
-   coverage/
-   .pytest_cache/
-   ```
+```gitignore
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
 
-# Part 2: Backend Setup
+# Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-4. Initialize Backend Project:
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
 
-   ```bash
-   cd backend
+# Docker
+docker-compose.override.yml
 
-   # Initialize Poetry project
-   poetry init \\
-     --name gpx-tracker-backend \\
-     --description "Backend for GPX tracking application" \\
-     --author "Your Name <your.email@example.com>" \\
-     --python "^3.9" \\
-     --dependency fastapi \\
-     --dependency uvicorn \\
-     --dependency sqlalchemy \\\
-     --dependency alembic \\\
-     --dependency psycopg2-binary \\\
-     --dependency geoalchemy2 \\\
-     --dependency python-multipart \\\
-     --dependency python-jose[cryptography] \\\
-     --dependency passlib[bcrypt] \\\
-     --dependency gpxpy \\\
-     --dependency celery \\\
-     --dependency redis \\\
-     --dependency shapely \\\
-     --dev-dependency pytest \\\
-     --dev-dependency pytest-cov \\\
-     --dev-dependency black \\\
-     --dev-dependency flake8 \\\
-     --dev-dependency mypy \\\
-     --no-interaction
+# Project specific
+.coverage
+coverage/
+.pytest_cache/
+```
 
-   # Install dependencies
-   poetry install
-   ```
+## Part 2: Backend Setup
 
-5. Create Backend Configuration Files:
-   A. backend/app/core/config.py:
+### Initialize Backend Project
 
-   ```python
-   from pydantic_settings import BaseSettings
-   from typing import List, Optional
+```bash
+cd backend
 
-   class Settings(BaseSettings):
-       PROJECT_NAME: str = "GPX Tracker"
-       VERSION: str = "1.0.0"
-       API_V1_STR: str = "/api/v1"
+# Initialize Poetry project
+poetry init \
+  --name gpx-tracker-backend \
+  --description "Backend for GPX tracking application" \
+  --author "Your Name <your.email@example.com>" \
+  --python "^3.9" \
+  --dependency fastapi \
+  --dependency uvicorn \
+  --dependency sqlalchemy \
+  --dependency alembic \
+  --dependency psycopg2-binary \
+  --dependency geoalchemy2 \
+  --dependency python-multipart \
+  --dependency python-jose[cryptography] \
+  --dependency passlib[bcrypt] \
+  --dependency gpxpy \
+  --dependency celery \
+  --dependency redis \
+  --dependency shapely \
+  --dev-dependency pytest \
+  --dev-dependency pytest-cov \
+  --dev-dependency black \
+  --dev-dependency flake8 \
+  --dev-dependency mypy \
+  --no-interaction
 
-       POSTGRES_SERVER: str = "localhost"
-       POSTGRES_USER: str = "postgres"
-       POSTGRES_PASSWORD: str = "password"
-       POSTGRES_DB: str = "gpx_tracker"
-       POSTGRES_PORT: str = "5432"
+# Install dependencies
+poetry install
+```
 
-       DATABASE_URL: Optional[str] = None
+### Backend Configuration Files
 
-       @property
-       def SQLALCHEMY_DATABASE_URI(self) -> str:
-           if self.DATABASE_URL:
-               return self.DATABASE_URL
-           return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+A. backend/app/core/config.py:
 
-       REDIS_URL: str = "redis://localhost:6379/0"
+```python
+from pydantic_settings import BaseSettings
+from typing import List, Optional
 
-       # Security
-       SECRET_KEY: str = "your-secret-key-here"
-       ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
+class Settings(BaseSettings):
+    PROJECT_NAME: str = "GPX Tracker"
+    VERSION: str = "1.0.0"
+    API_V1_STR: str = "/api/v1"
 
-       # CORS
-       BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000"]
+    POSTGRES_SERVER: str = "localhost"
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "password"
+    POSTGRES_DB: str = "gpx_tracker"
+    POSTGRES_PORT: str = "5432"
 
-       class Config:
-           case_sensitive = True
-           env_file = ".env"
+    DATABASE_URL: Optional[str] = None
 
-   settings = Settings()
-   ```
+    @property
+    def SQLALCHEMY_DATABASE_URI(self) -> str:
+        if self.DATABASE_URL:
+            return self.DATABASE_URL
+        return f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
-   B. backend/app/main.py:
+    REDIS_URL: str = "redis://localhost:6379/0"
 
-   ```python
-   from fastapi import FastAPI
-   from fastapi.middleware.cors import CORSMiddleware
-   from app.core.config import settings
+    # Security
+    SECRET_KEY: str = "your-secret-key-here"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
 
-   app = FastAPI(
-       title=settings.PROJECT_NAME,
-       version=settings.VERSION,
-       openapi_url=f"{settings.API_V1_STR}/openapi.json"
-   )
+    # CORS
+    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000"]
 
-   # Set up CORS
-   app.add_middleware(
-       CORSMiddleware,
-       allow_origins=settings.BACKEND_CORS_ORIGINS,
-       allow_credentials=True,
-       allow_methods=["*"],
-       allow_headers=["*"],
-   )
+    class Config:
+        case_sensitive = True
+        env_file = ".env"
 
-   @app.get("/")
-   def read_root():
-       return {"message": "Welcome to GPX Tracker API"}
-   ```
+settings = Settings()
+```
 
-# Part 3: Frontend Setup
+B. backend/app/main.py:
 
-6. Initialize Frontend Project:
+```python
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.core.config import settings
 
-   ```bash
-   cd ../frontend
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version=settings.VERSION,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json"
+)
 
-   # Create new Vite project with React and TypeScript
-   npm create vite@latest . -- --template react-ts
+# Set up CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.BACKEND_CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-   # Install dependencies
-   npm install
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to GPX Tracker API"}
+```
 
-   # Install additional dependencies
-   npm install @tanstack/react-query \\
-             axios \\
-             react-router-dom \\
-             leaflet \\
-             @types/leaflet \\
-             @tailwindcss/forms \\
-             tailwindcss \\
-             postcss \\\
-             autoprefixer \\\
-             clsx \\\
-             @headlessui/react \\\
-             zustand \\\
-             date-fns
+## Part 3: Frontend Setup
 
-   # Install dev dependencies
-   npm install -D @testing-library/react \\
-                  @testing-library/jest-dom \\
-                  @testing-library/user-event \\
-                  @types/node \\
-                  prettier \\
-                  eslint-config-prettier \\
-                  vitest
-   ```
+### Initialize Frontend Project
 
-7. Configure Frontend:
-   A. Create src/config.ts:
+```bash
+cd ../frontend
 
-   ```typescript
-   const config = {
-     apiUrl: import.meta.env.VITE_API_URL || "http://localhost:8000",
-     apiVersion: "v1",
-     mapboxToken: import.meta.env.VITE_MAPBOX_TOKEN,
-     defaultCenter: { lat: 0, lng: 0 },
-     defaultZoom: 2,
-   };
+# Create new Vite project with React and TypeScript
+npm create vite@latest . -- --template react-ts
 
-   export default config;
-   ```
+# Install dependencies
+npm install
 
-   B. Create src/services/api.ts:
+# Install additional dependencies
+npm install @tanstack/react-query \
+           axios \
+           react-router-dom \
+           leaflet \
+           @types/leaflet \
+           @tailwindcss/forms \
+           tailwindcss \
+           postcss \
+           autoprefixer \
+           clsx \
+           @headlessui/react \
+           zustand \
+           date-fns
 
-   ```typescript
-   import axios from "axios";
-   import config from "../config";
+# Install dev dependencies
+npm install -D @testing-library/react \
+               @testing-library/jest-dom \
+               @testing-library/user-event \
+               @types/node \
+               prettier \
+               eslint-config-prettier \
+               vitest
+```
 
-   const api = axios.create({
-     baseURL: `${config.apiUrl}/api/${config.apiVersion}`,
-     headers: {
-       "Content-Type": "application/json",
-     },
-   });
+### Configure Frontend
 
-   // Add request interceptor for auth token
-   api.interceptors.request.use((config) => {
-     const token = localStorage.getItem("token");
-     if (token) {
-       config.headers.Authorization = `Bearer ${token}`;
-     }
-     return config;
-   });
+A. Create src/config.ts:
 
-   export default api;
-   ```
+```typescript
+const config = {
+  apiUrl: import.meta.env.VITE_API_URL || "http://localhost:8000",
+  apiVersion: "v1",
+  mapboxToken: import.meta.env.VITE_MAPBOX_TOKEN,
+  defaultCenter: { lat: 0, lng: 0 },
+  defaultZoom: 2,
+};
 
-   C. Configure Tailwind CSS:
+export default config;
+```
 
-   ```bash
-   # Initialize Tailwind CSS
-   npx tailwindcss init -p
-   ```
+B. Create src/services/api.ts:
 
-   Update tailwind.config.js:
+```typescript
+import axios from "axios";
+import config from "../config";
 
-   ```javascript
-   /** @type {import('tailwindcss').Config} */
-   export default {
-     content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-     theme: {
-       extend: {},
-     },
-     plugins: [require("@tailwindcss/forms")],
-   };
-   ```
+const api = axios.create({
+  baseURL: `${config.apiUrl}/api/${config.apiVersion}`,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-   D. Update src/index.css:
+// Add request interceptor for auth token
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-   ```css
-   @tailwind base;
-   @tailwind components;
-   @tailwind utilities;
-   ```
+export default api;
+```
 
-# Part 4: Docker and Documentation Setup
+C. Configure Tailwind CSS:
 
-8.  Create Docker Configuration:
-    A. docker/backend/Dockerfile:
+```bash
+# Initialize Tailwind CSS
+npx tailwindcss init -p
+```
+
+Update tailwind.config.js:
+
+```javascript
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [require("@tailwindcss/forms")],
+};
+```
+
+D. Update src/index.css:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+## Part 4: Docker and Documentation Setup
+
+### Docker Configuration
+
+A. docker/backend/Dockerfile:
 
 ```dockerfile
 FROM python:3.9-slim
@@ -323,7 +357,7 @@ WORKDIR /app
 RUN pip install poetry
 
 COPY pyproject.toml poetry.lock ./
-RUN poetry config virtualenvs.create false \\
+RUN poetry config virtualenvs.create false \
     && poetry install --no-dev --no-interaction
 
 COPY . .
@@ -398,318 +432,220 @@ volumes:
   postgres_data:
 ```
 
-9. Create Project Documentation:
-   A. Update README.md:
-
-   ````markdown
-   # GPX Tracker
-
-   A web application for tracking and visualizing GPX routes.
-
-   ## Prerequisites
-
-   - Docker and Docker Compose
-   - Node.js 18+
-   - Python 3.9+
-   - Poetry
-
-   ## Development Setup
-
-   1. Clone the repository:
-      ```bash
-      git clone https://github.com/yourusername/gpx-tracker.git
-      cd gpx-tracker
-      ```
-   ````
-
-   2. Set up environment variables:
-
-      ```bash
-      # Backend
-      cp backend/.env.example backend/.env
-      # Frontend
-      cp frontend/.env.example frontend/.env
-      ```
-
-   3. Start the development environment:
-
-      ```bash
-      docker-compose up -d
-      ```
-
-   4. Access the applications:
-      - Frontend: http://localhost:3000
-      - Backend API: http://localhost:8000
-      - API Documentation: http://localhost:8000/docs
-
-   ## Development Commands
-
-   Backend:
-
-   ```bash
-   cd backend
-   poetry install  # Install dependencies
-   poetry run pytest  # Run tests
-   poetry run black .  # Format code
-   poetry run flake8  # Lint code
-   ```
+## IDE Configuration
+
+### VS Code Workspace Settings
+
+Create `.vscode/settings.json` in your project root:
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "python.analysis.typeCheckingMode": "basic",
+  "python.formatting.provider": "black",
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.python"
+  },
+  "[javascript][typescript][javascriptreact][typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/*.pyc": true
+  }
+}
+```
+
+These settings configure:
+
+- Automatic code formatting on save
+- ESLint auto-fix on save
+- Python type checking and linting
+- Language-specific formatters
+- File exclusions for cleaner workspace
+
+## Part 5: Development Scripts and Testing Setup
+
+### Development Scripts
+
+A. Add scripts to backend/pyproject.toml:
+
+```toml
+[tool.poetry.scripts]
+start = "uvicorn app.main:app --reload"
+test = "pytest"
+lint = "flake8"
+format = "black ."
+typecheck = "mypy ."
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--verbosity=2 --cov=app"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+```
+
+B. Update frontend/package.json scripts:
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "format": "prettier --write 'src/**/*.{ts,tsx,css}'"
+  }
+}
+```
+
+### Initial Tests Setup
+
+A. backend/tests/conftest.py:
+
+```python
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from app.main import app
+from app.core.config import settings
+from app.db.base import Base
+
+@pytest.fixture(scope="session")
+def test_db():
+    # Use SQLite for tests
+    SQLALCHEMY_TEST_DATABASE_URL = "sqlite:///./test.db"
+    engine = create_engine(SQLALCHEMY_TEST_DATABASE_URL)
+    TestingSessionLocal = sessionmaker(bind=engine)
 
-   Frontend:
+    Base.metadata.create_all(bind=engine)
+    yield engine
+    Base.metadata.drop_all(bind=engine)
 
-   ```bash
-   cd frontend
-   npm install  # Install dependencies
-   npm run dev  # Start development server
-   npm run test  # Run tests
-   npm run build  # Build for production
-   ```
-
-   ## Project Structure
-
-   ```
-   gpx-tracker/
-   ├── backend/           # FastAPI application
-   │   ├── app/
-   │   │   ├── api/      # API endpoints
-   │   │   ├── core/     # Core functionality
-   │   │   ├── db/       # Database
-   │   │   ├── models/   # SQLAlchemy models
-   │   │   ├── schemas/  # Pydantic schemas
-   │   │   └── services/ # Business logic
-   │   └── tests/        # Backend tests
-   ├── frontend/         # React application
-   │   ├── src/
-   │   │   ├── components/
-   │   │   ├── pages/
-   │   │   ├── services/
-   │   │   └── utils/
-   │   └── tests/
-   └── docker/           # Docker configuration
-       ├── backend/      # Backend Dockerfile
-       ├── frontend/     # Frontend Dockerfile
-       └── postgres/     # PostgreSQL initialization scripts
-   ```
-
-   ## Contributing
-
-   1. Create a new branch for your feature:
-
-      ```bash
-      git checkout -b feature/your-feature-name
-      ```
-
-   2. Make your changes and commit them:
-
-      ```bash
-      git add .
-      git commit -m "Add your feature description"
-      ```
-
-   3. Push to your branch:
-
-      ```bash
-      git push origin feature/your-feature-name
-      ```
-
-   4. Create a Pull Request on GitHub
-
-   ## Code Style
-
-   - Backend: Follow PEP 8 guidelines
-   - Frontend: Follow ESLint and Prettier configuration
-   - Use meaningful commit messages
-   - Write tests for new features
-
-   ## License
-
-   MIT License - see LICENSE file for details
-
-   ````
-
-   B. Create .env.example files:
-   backend/.env.example:
-   ```env
-   # Database
-   DATABASE_URL=postgresql://postgres:password@localhost:5432/gpx_tracker
-
-   # Redis
-   REDIS_URL=redis://localhost:6379/0
-
-   # Security
-   SECRET_KEY=your-secret-key-here
-   ACCESS_TOKEN_EXPIRE_MINUTES=11520
-
-   # CORS
-   BACKEND_CORS_ORIGINS=["http://localhost:3000"]
-
-   # Debug
-   DEBUG=True
-   ````
-
-   frontend/.env.example:
-
-   ```env
-   VITE_API_URL=http://localhost:8000
-   VITE_MAPBOX_TOKEN=your-mapbox-token-here
-   ```
-
-# Part 5: Development Scripts and Testing Setup
-
-10. Set up Development Scripts:
-    A. Add scripts to backend/pyproject.toml:
-
-    ```toml
-    [tool.poetry.scripts]
-    start = "uvicorn app.main:app --reload"
-    test = "pytest"
-    lint = "flake8"
-    format = "black ."
-    typecheck = "mypy ."
-
-    [tool.pytest.ini_options]
-    testpaths = ["tests"]
-    python_files = "test_*.py"
-    addopts = "--verbosity=2 --cov=app"
-
-    [tool.black]
-    line-length = 88
-    target-version = ['py39']
-    include = '\\.pyi?$'
-
-    [tool.mypy]
-    python_version = "3.9"
-    warn_return_any = true
-    warn_unused_configs = true
-    disallow_untyped_defs = true
-    ```
-
-    B. Update frontend/package.json scripts:
-
-    ```json
-    {
-      "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
-        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "preview": "vite preview",
-        "test": "vitest run",
-        "test:watch": "vitest",
-        "test:coverage": "vitest run --coverage",
-        "format": "prettier --write 'src/**/*.{ts,tsx,css}'"
-      }
-    }
-    ```
-
-11. Set up Initial Tests:
-    A. backend/tests/conftest.py:
-
-    ```python
-    import pytest
-    from fastapi.testclient import TestClient
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import sessionmaker
-    from app.main import app
-    from app.core.config import settings
-    from app.db.base import Base
-
-    @pytest.fixture(scope="session")
-    def test_db():
-        # Use SQLite for tests
-        SQLALCHEMY_TEST_DATABASE_URL = "sqlite:///./test.db"
-        engine = create_engine(SQLALCHEMY_TEST_DATABASE_URL)
-        TestingSessionLocal = sessionmaker(bind=engine)
-
-        Base.metadata.create_all(bind=engine)
-        yield engine
-        Base.metadata.drop_all(bind=engine)
-
-    @pytest.fixture
-    def client():
-        with TestClient(app) as test_client:
-            yield test_client
-    ```
-
-    B. frontend/src/tests/setup.ts:
-
-    ```typescript
-    import "@testing-library/jest-dom";
-    import { expect, afterEach } from "vitest";
-    import { cleanup } from "@testing-library/react";
-    import matchers from "@testing-library/jest-dom/matchers";
-
-    // Extend Vitest's expect method with testing-library methods
-    expect.extend(matchers);
-
-    // Clean up after each test
-    afterEach(() => {
-      cleanup();
-    });
-    ```
-
-12. Add Git Hooks (using Husky):
-
-    ```bash
-    # Install Husky
-    cd frontend
-    npm install -D husky lint-staged
-    npx husky install
-    npm pkg set scripts.prepare="husky install"
-
-    # Add pre-commit hook
-    npx husky add .husky/pre-commit "npm run lint-staged"
-    ```
-
-    Add to frontend/package.json:
-
-    ```json
-    {
-      "lint-staged": {
-        "*.{ts,tsx}": ["eslint --fix"],
-        "*.{ts,tsx,css,md}": ["prettier --write"]
-      }
-    }
-    ```
-
-# Final Verification and Next Steps
-
-13. Verification Checklist:
-
-    A. Repository Structure:
-
-    ```bash
-    # Verify project structure
-    tree -L 2 -I 'node_modules|dist|__pycache__|.git'
-    ```
-
-    B. Test Development Environment:
-
-    ```bash
-    # Start all services
-    docker-compose up -d
-
-    # Check service status
-    docker-compose ps
-
-    # Verify backend
-    curl http://localhost:8000/api/v1/
-
-    # Verify frontend
-    curl http://localhost:3000
-    ```
-
-    C. Run Tests:
-
-    ```bash
-    # Backend tests
-    cd backend
-    poetry run pytest
-
-    # Frontend tests
-    cd frontend
-    npm run test
-    ```
-
-Next Steps:
+@pytest.fixture
+def client():
+    with TestClient(app) as test_client:
+        yield test_client
+```
+
+B. frontend/src/tests/setup.ts:
+
+```typescript
+import "@testing-library/jest-dom";
+import { expect, afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
+import matchers from "@testing-library/jest-dom/matchers";
+
+// Extend Vitest's expect method with testing-library methods
+expect.extend(matchers);
+
+// Clean up after each test
+afterEach(() => {
+  cleanup();
+});
+```
+
+### Git Hooks Setup
+
+```bash
+# Install Husky
+cd frontend
+npm install -D husky lint-staged
+npx husky install
+npm pkg set scripts.prepare="husky install"
+
+# Add pre-commit hook
+npx husky add .husky/pre-commit "npm run lint-staged"
+```
+
+Add to frontend/package.json:
+
+```json
+{
+  "lint-staged": {
+    "*.{ts,tsx}": ["eslint --fix"],
+    "*.{ts,tsx,css,md}": ["prettier --write"]
+  }
+}
+```
+
+## Final Verification and Next Steps
+
+### Verification Checklist
+
+A. Repository Structure:
+
+```bash
+# Verify project structure
+tree -L 2 -I 'node_modules|dist|__pycache__|.git'
+```
+
+B. Test Development Environment:
+
+```bash
+# Start all services
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+
+# Verify backend
+curl http://localhost:8000/api/v1/
+
+# Verify frontend
+curl http://localhost:3000
+```
+
+C. Run Tests:
+
+```bash
+# Backend tests
+cd backend
+poetry run pytest
+
+# Frontend tests
+cd frontend
+npm run test
+```
+
+### Common Issues and Solutions
+
+1. Docker:
+
+   - If services won't start: `docker-compose down -v && docker-compose up -d`
+   - If ports are in use: Check running services with `docker ps` or `netstat`
+
+2. Dependencies:
+
+   - Backend: `poetry install --no-root`
+   - Frontend: Delete node_modules and run `npm install`
+
+3. Database:
+   - Connection issues: Check PostgreSQL logs with `docker-compose logs postgres`
+   - Reset database: `docker-compose down -v` (warning: destroys all data)
+
+### Next Steps
 
 1. Database Setup:
 
@@ -732,22 +668,6 @@ Next Steps:
    - Set up browser development tools for React
    - Configure debugging in VS Code for both Python and TypeScript
 
-Common Issues and Solutions:
-
-1. Docker:
-
-   - If services won't start: `docker-compose down -v && docker-compose up -d`
-   - If ports are in use: Check running services with `docker ps` or `netstat`
-
-2. Dependencies:
-
-   - Backend: `poetry install --no-root`
-   - Frontend: Delete node_modules and run `npm install`
-
-3. Database:
-   - Connection issues: Check PostgreSQL logs with `docker-compose logs postgres`
-   - Reset database: `docker-compose down -v` (warning: destroys all data)
-
 Remember to:
 
 1. Never commit sensitive information
@@ -755,35 +675,3 @@ Remember to:
 3. Write tests for new features
 4. Document API changes
 5. Follow the established code style guidelines
-
-# Project Initialization Complete
-
-You now have a fully initialized project with:
-
-1. GitHub repository with proper structure and configuration
-2. Backend (FastAPI) setup with:
-
-   - Poetry for dependency management
-   - Testing infrastructure
-   - Code formatting and linting
-   - Basic API structure
-
-3. Frontend (React) setup with:
-
-   - TypeScript configuration
-   - Vite build tools
-   - Testing framework
-   - Code formatting and linting
-
-4. Docker configuration for development
-5. Comprehensive documentation
-6. Development scripts and tools
-
-You can now start development by:
-
-1. Cloning the repository
-2. Installing dependencies
-3. Starting the development environment
-4. Following the development workflow in the README
-
-The next phase will involve setting up the database schema and implementing the core features of the GPX tracking application.
