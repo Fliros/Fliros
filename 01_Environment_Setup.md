@@ -145,4 +145,4 @@ Python dependency management installation:
 ---
 
 You're now ready to begin development of the GPX tracking application. The next phase will involve setting up the database schema and implementing the basic backend API endpoints.
-For detailed project initialization, structure setup, and configuration steps, refer to [Project Initialization](Proj_init.md).
+For detailed project initialization, structure setup, and configuration steps, refer to [Project Initialization](02_Project_Initialization.md).
