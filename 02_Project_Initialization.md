@@ -650,8 +650,7 @@ npm run test
 
    - Set up migrations using Alembic
    - Create initial database models
-
-[Database Setup Instruction](03_Database_Setup.md)
+     [Database Setup Instruction](03_Database_Setup.md)
 
 2. Authentication:
 
