@@ -646,11 +646,10 @@ npm run test
 
 ### Next Steps
 
-1. Database Setup:
+1. [Database Setup](03_Database_Setup.md):
 
    - Set up migrations using Alembic
    - Create initial database models
-     [Database Setup Instruction](03_Database_Setup.md)
 
 2. Authentication:
 
