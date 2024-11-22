@@ -1,4 +1,4 @@
-Frontend Development
+# Frontend Development
 
 ## Part 1: Project Setup and Core Structure
 
