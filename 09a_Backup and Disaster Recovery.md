@@ -199,7 +199,7 @@
                return False
    ```
 
-## Part 2: File System and State Backups",
+## Part 2: File System and State Backups
 
 1. File System Backup Service:
    backend/app/services/backup/file_system.py:
@@ -446,7 +446,7 @@
        cli()
    ```
 
-## Part 3: Recovery Automation",
+## Part 3: Recovery Automation
 
 1. Recovery Automation Service:
    backend/app/services/backup/recovery.py:

@@ -584,7 +584,7 @@ backend/tests/services/test_area_calculator.py:
        os.remove("test.gpx")
    ```
 
-## Part 3. Frontend Test Configuration:
+## Part 3. Frontend Test Configuration
 
 frontend/package.json:
 
