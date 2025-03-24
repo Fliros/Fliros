@@ -1,12 +1,12 @@
 # 🚧 Under Construction 🚧
 Hi, I'm Volodymyr
 ### 💫 About Me:
-🔭 I’m currently working on Reveal 
-👯 I’m looking to collaborate on mobile development
-🤝 I’m looking for help with my startup
-🌱 I’m currently learning - whatever helps me in my development :) 
-💬 Ask me about - when I'll be free to go for a cycling
-⚡ Fun fact - only in private conversation by the beer =) 
+🔭 I’m currently working on Reveal<br>
+👯 I’m looking to collaborate on mobile development<br>
+🤝 I’m looking for help with my startup<br>
+🌱 I’m currently learning - whatever helps me in my development 😄 <br>
+💬 Ask me about - when I'll be free to go for a cycling <br>
+⚡ Fun fact - only in private conversation by the beer🍻 😂 <br>
 
 ## 🌐 Socials:
 [![Facebook](https://img.shields.io/badge/Facebook-%231877F2.svg?logo=Facebook&logoColor=white)](https://facebook.com/fliros) [![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?logo=Instagram&logoColor=white)](https://instagram.com/vovo.tu.nieje) [![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://linkedin.com/in/fliros) [![Reddit](https://img.shields.io/badge/Reddit-%23FF4500.svg?logo=Reddit&logoColor=white)](https://reddit.com/user/theFliros) [![X](https://img.shields.io/badge/X-black.svg?logo=X&logoColor=white)](https://x.com/Fliros) 
