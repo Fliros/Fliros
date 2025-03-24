@@ -1,6 +1,6 @@
 # 🚧 Under Construction 🚧
 Hi, I'm Volodymyr
-# 💫 About Me:
+### 💫 About Me:
 🔭 I’m currently working on Reveal 
 👯 I’m looking to collaborate on mobile development
 🤝 I’m looking for help with my startup
